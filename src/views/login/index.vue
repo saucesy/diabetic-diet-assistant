@@ -298,11 +298,15 @@
 import store from '@/store'
 import md5 from 'crypto-js/md5'
 import { updateProfile } from '@/api/user'
+import {sexOptions} from '@/views/login/props';
 
 export default {
   name: 'login',
   data() {
     return {
+      // sex options
+      sexOptions: sexOptions,
+
       current: 0,
 
       // login info
@@ -318,22 +322,6 @@ export default {
         weight: 0,
         birthday: null
       },
-
-      // sex options
-      sexOptions: [
-        {
-          label: 'Unknown',
-          value: 0
-        },
-        {
-          label: 'Male',
-          value: 1
-        },
-        {
-          label: 'Female',
-          value: 2
-        }
-      ],
 
       // register user id
       userID: '',

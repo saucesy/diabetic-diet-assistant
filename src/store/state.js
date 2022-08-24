@@ -1,7 +1,7 @@
 import {getToken} from "@/utils/auth";
 
 export default {
-  profile: '',
+  profile: null,
   token: getToken(),
   device: 'desktop',
 }

@@ -1,6 +1,12 @@
 <template>
   <div :class="{ 'item': true, 'active': isActive }" @click="navigateTo">
-    <img :src="iconPath" :alt="title">
+    <div class="item-icon">
+      <img class="icon" :src="iconPath" :alt="title">
+      <span v-if="$store.profile && $store.profile.notification"
+            class="badge badge-info">
+        {{ $store.profile.notification }}
+      </span>
+    </div>
     <span>{{ title }}</span>
   </div>
 </template>
@@ -27,6 +33,9 @@ export default {
     iconPath() {
       return require(`@/assets/images/${this.icon}${this.isActive ? '-active' : ''}.png`)
     },
+    showNotification() {
+      return this.data.children[0].meta?.notification && this.$store?.profile?.notification
+    }
   },
   methods: {
     navigateTo() {
@@ -37,3 +46,15 @@ export default {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+.item-icon {
+  position: relative;
+
+  .badge {
+    position: absolute;
+    top: -.65rem;
+    right: -1rem;
+  }
+}
+</style>

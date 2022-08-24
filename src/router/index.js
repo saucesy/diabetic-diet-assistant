@@ -48,7 +48,7 @@ const routes = [
         path: '',
         name: 'Relations',
         component: () => import('@/views/relations'),
-        meta: { title: 'Relations',icon: 'relations' }
+        meta: { title: 'Relations',icon: 'relations', notification: true }
       }
     ]
   },

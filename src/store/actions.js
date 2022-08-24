@@ -11,9 +11,10 @@ export default {
   login({commit}, payload) {
     return new Promise((resolve, reject) => {
       login(payload).then((res) => {
-        const { id } = res.data
+        const { id, data } = res.data
         setToken(id, payload.remember ?? false)
         commit('SET_TOKEN', id)
+        commit('SET_PROFILE', data)
         return resolve(res)
       }).catch((res)=>{
         Message.error(res.msg)
@@ -26,8 +27,8 @@ export default {
   register({commit}, payload) {
     return new Promise((resolve, reject) => {
       register(payload).then((res) => {
-        const { id } = res.data
         // Do set token after login
+        // const { id } = res.data
         // setToken(id)
         // commit('SET_TOKEN', id)
         return resolve(res)
