@@ -185,12 +185,12 @@ export default {
 
 @media (min-width: 1000px) {
   #timeline .timeline-card {
-    max-width: 450px;
+    width: 400px;
     margin: 45px 90px;
   }
 
   #timeline .timeline-card:nth-child(odd) {
-    margin-left: 55px;
+    right: 36px;
   }
 
   #timeline .timeline-card:nth-child(odd) .head::after {
@@ -204,7 +204,7 @@ export default {
   }
 
   #timeline .timeline-card:nth-child(even) {
-    margin-left: 10px;
+    right: 32px;
   }
 
   #timeline .timeline-card:nth-child(even) .head::after {
