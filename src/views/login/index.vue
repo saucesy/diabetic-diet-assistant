@@ -1,5 +1,6 @@
 <template>
   <div class="login">
+    <div class="login-bg"></div>
     <b-container>
       <b-row class="justify-content-center align-items-center min-vh-100">
         <b-col lg="6" md="9">
@@ -218,21 +219,16 @@
                   <!-- form -->
                   <b-form class="py-2">
                     <!-- Gender -->
-                    <b-form-group label="Gender:">
-                      <b-radio-group
-                        class="d-flex"
+                    <b-input
+                        class="rounded-pill fs-6"
                         v-model="profile.gender"
+                        trim
+                        placeholder="Gender"
+                        type="text"
+                        required
                         size="lg"
-                      >
-                        <b-radio
-                          class="flex-grow-1 text-secondary fs-6 login-checkbox"
-                          v-for="item in sexOptions"
-                          :value="item.value"
-                        >
-                          {{ item.label }}
-                        </b-radio>
-                      </b-radio-group>
-                    </b-form-group>
+                    >
+                    </b-input>
 
                     <!-- Timepicker -->
                     <b-datepicker
@@ -281,7 +277,7 @@
                     variant="primary"
                     pill
                     class="mt-4 w-100 d-block"
-                    @click="skipProfile"
+                    @click="changeTab(0)"
                     >Skip</b-button
                   >
                 </b-card-body>
@@ -317,9 +313,9 @@ export default {
       policy: false,
 
       profile: {
-        gender: 0,
-        height: 0,
-        weight: 0,
+        gender: null,
+        height: null,
+        weight: null,
         birthday: null
       },
 
@@ -346,6 +342,7 @@ export default {
     }
   },
   methods: {
+    // change login or register or profile
     changeTab(index) {
       this.current = index
       if (index <= 1) {
@@ -355,14 +352,15 @@ export default {
         this.policy = false
         this.doValidate(false)
         this.profile = {
-          gender: 0,
-          height: 0,
-          weight: 0,
+          gender: null,
+          height: null,
+          weight: null,
           birthday: null
         }
       }
     },
 
+    // validate
     doValidate(show = true) {
       for (const key in this.showError) {
         this.showError[key] = show
@@ -373,6 +371,7 @@ export default {
       this.$message.warning('Please complete the form')
     },
 
+    // login
     login() {
       this.doValidate()
 
@@ -392,6 +391,7 @@ export default {
       }
     },
 
+    // register
     register() {
       this.doValidate()
 
@@ -418,27 +418,33 @@ export default {
       }
     },
 
+    // update profile
     updateProfile() {
-      if (this.profile.height < 0) {
+      if (typeof this.profile.height === 'number' && this.profile.height < 0) {
         this.$message.error('Height must be greater than 0')
-      } else if (this.profile.weight < 0) {
+      } else if (typeof this.profile.weight === 'number' && this.profile.weight < 0) {
         this.$message.error('Weight must be greater than 0')
       } else {
-        updateProfile(this.profile, {
-          Authorization: this.userID
-        })
-          .then((res) => {
-            this.$message.success('Update success')
-            setTimeout(() => this.changeTab(0), 1000)
+        const profile = {}
+        for (const key in this.profile) {
+          if (this.profile[key] !== null) profile[key] = this.profile[key]
+        }
+        // no data
+        if (Object.keys(profile).length === 0) {
+          this.alertComplete()
+        } else {
+          updateProfile(profile, {
+            Authorization: this.userID
           })
-          .catch((res) => {
-            this.$message.error(res.msg)
-          })
+            .then((res) => {
+              this.$message.success('Update success')
+              setTimeout(() => this.changeTab(0), 1000)
+            })
+            .catch((res) => {
+              this.$message.error(res.msg)
+            })
+        }
       }
-    },
-
-    skipProfile() {
-      this.changeTab(0)
     }
   }
 }
@@ -447,10 +453,20 @@ export default {
 <style lang="scss" scoped>
 .login {
   min-height: 100vh;
-  /*background-image: url(../../assets/images/health-background.jpg);
+  position: relative;
+}
+
+.login-bg {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-image: url(../../assets/images/health-background.jpg);
   background-repeat: no-repeat;
   background-size: cover;
-  background-position: right;*/
+  background-position: right;
+  filter: blur(6px);
   background-color: #80c2d0;
 }
 

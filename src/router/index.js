@@ -58,7 +58,7 @@ const routes = [
     hidden: true,
     children: [
       {
-        path: '',
+        path: ':othersID?',
         name: 'Profile',
         component: () => import('@/views/profile'),
         meta: { title: 'Profile',icon: 'relations' }

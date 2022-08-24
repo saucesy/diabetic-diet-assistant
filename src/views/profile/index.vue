@@ -3,13 +3,13 @@
     <div class="container" v-if="profile">
       <!-- avatar -->
       <div class="d-flex justify-content-center align-items-center mb-4">
-        <b-img v-if="profile.avatar_url" :src="profile.avatar_url" style="object-fit: cover" rounded="circle"
-               width="100" height="100"></b-img>
-        <b-img v-else :src="require('@/assets/images/logo-blue.png')" rounded="circle" width="100"
-               height="100"></b-img>
+        <b-img v-if="profile.avatar_url" :src="profile.avatar_url" style="object-fit: cover" class="shadow"
+               rounded="circle" width="100" height="100" @click="onAvatarClick"></b-img>
+        <b-img v-else :src="require('@/assets/images/logo-blue.png')" class="shadow" rounded="circle" width="100"
+               height="100" @click="onAvatarClick"></b-img>
 
         <!-- choose avatar -->
-        <b-form-file v-model="file" v-show="false" ></b-form-file>
+        <b-form-file class="avatar-upload" v-model="file" v-show="false" accept="image/*"></b-form-file>
       </div>
 
       <!-- lines -->
@@ -56,22 +56,28 @@
       </template>
 
       <!-- update -->
-      <div class="d-flex justify-content-center align-items-center mt-5">
+      <div class="d-flex justify-content-center align-items-center mt-5" v-if="!othersID">
         <b-button variant="primary" pill @click="updateProfile">Update</b-button>
+      </div>
+      <!-- TODO: update remark add apply -->
+      <div class="d-flex justify-content-center align-items-center mt-5" v-else>
+        <b-button variant="primary" pill>Apply to Establish a Relationship</b-button>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import {sexOptions} from '@/views/login/props';
-import {getSelfProfile, updateProfile} from '@/api/user';
+import {getSelfProfile, updateProfile, getProfile} from '@/api/user';
 import {uploadImage} from '@/api/file';
 
 export default {
   name: 'Profile',
   data() {
     return {
+      // show others profile
+      othersID: null,
+
       profile: null,
       // choose avatar
       file: null,
@@ -105,16 +111,30 @@ export default {
         {
           key: 'gender',
           readonly: false,
-          type: 'radio',
-          options: sexOptions
+          type: 'text'
         }
       ]
     };
   },
+  // get show id
+  created() {
+    this.othersID = this.$route.params.othersID ?? null;
+  },
   mounted() {
     // get profile
-    getSelfProfile()
-        .then(res => this.profile = res.data)
+    let request;
+
+    // show others profile
+    if (this.othersID) {
+      // disable all form
+      this.sort.forEach(item => item.disabled = true);
+      // TODO: relation
+      request = getProfile(this.othersID);
+    }
+    else {
+      request = getSelfProfile();
+    }
+    request.then(res => this.profile = res.data)
         .catch(res => this.$message.error(res.msg));
   },
   methods: {
@@ -124,6 +144,13 @@ export default {
         updateProfile(profile)
             .then(res => this.$message.success('Update Success'))
             .catch(res => this.$message.error(res.msg));
+      }
+    },
+
+    // choose image
+    onAvatarClick() {
+      if (!this.othersID) {
+        document.querySelector('.avatar-upload .custom-file-input').click();
       }
     }
   },
