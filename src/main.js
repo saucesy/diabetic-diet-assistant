@@ -14,12 +14,8 @@ Vue.use(ElementUI)
 Vue.use(BootstrapVue)
 Vue.config.productionTip = false
 
-document.querySelectorAll('*')
-
 new Vue({
   router,
   store,
   render: h => h(App)
 }).$mount('#app')
-
-// niu bi
