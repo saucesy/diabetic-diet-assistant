@@ -1,0 +1,61 @@
+// global transition css
+
+    /* fade */
+.fade-enter-active,
+.fade-leave-active {
+    transition: opacity 0.28s;
+}
+
+.fade-enter,
+.fade-leave-active {
+    opacity: 0;
+}
+
+/* fade-move */
+.fade-move-move,
+.fade-move-enter-active,
+.fade-move-leave-active {
+    transition: opacity 0.3s;
+    position: absolute;
+    left: 0;
+    right: 0;
+}
+
+.fade-move-move{
+    transition: opacity 0.3s;
+}
+
+.fade-move-enter-from,
+.fade-move-leave-to {
+    opacity: 0;
+}
+
+/* slide-y */
+.slide-y-enter-active {
+    transition: all .3s;
+}
+
+.slide-y-enter-from {
+    transform: translateY(50px);
+}
+
+.slide-y-enter-to {
+    transform: translateY(0);
+}
+
+/* fade-transform */
+.fade-transform-leave-active,
+.fade-transform-enter-active {
+    transition: all .5s;
+}
+
+.fade-transform-enter {
+    opacity: 0;
+    transform: translateX(-30px);
+}
+
+.fade-transform-leave-to {
+    opacity: 0;
+    transform: translateX(30px);
+}
+
