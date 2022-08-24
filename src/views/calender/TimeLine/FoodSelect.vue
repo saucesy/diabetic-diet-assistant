@@ -5,8 +5,6 @@
         placeholder="Please select..."
         value=""
         no-data-text="No food"
-        multiple
-        :multiple-limit="3"
         :class="{'display': isDisplay}"
         @change="$emit('onchange', $event)"
     >
@@ -28,8 +26,7 @@ export default {
   },
   data() {
     return {
-      isDisplay: false,
-      selectedFoodList: []
+      isDisplay: false
     }
   }
 }
