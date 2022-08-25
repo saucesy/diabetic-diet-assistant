@@ -5,6 +5,7 @@
       <span v-if="$store.profile && $store.profile.notification"
             class="badge badge-info">
         {{ $store.profile.notification }}
+        {{ $store.getters.profile.notification }}
       </span>
     </div>
     <span>{{ title }}</span>
@@ -35,6 +36,9 @@ export default {
     },
     showNotification() {
       return this.data.children[0].meta?.notification && this.$store?.profile?.notification
+    },
+    isNotify() {
+      return this.$store.getters.profile?.notification
     }
   },
   methods: {

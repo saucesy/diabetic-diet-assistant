@@ -14,7 +14,7 @@
 <script>
 import {Sidebar, AppMain} from './components'
 
-const WIDTH = 992
+const WIDTH = 768
 const {body} = document
 
 export default {
@@ -48,7 +48,7 @@ export default {
   },
   watch: {
     '$route.path'() {
-      this.$store.getters.device === 'mobile' && this.toggleMenu()
+      this.$store.getters.device === 'mobile' && this.isToggle &&this.toggleMenu()
     }
   },
   methods: {

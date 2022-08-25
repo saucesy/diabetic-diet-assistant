@@ -9,5 +9,23 @@
 
 body {
   overflow-x: hidden;
+
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+  
+  &::-webkit-scrollbar-track {
+    background-color: #fff;
+  }
+  
+  &::-webkit-scrollbar-thumb {
+    background-color: #ccc;
+  }
+}
+
+.single-omit {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 

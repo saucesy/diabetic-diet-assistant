@@ -1,6 +1,6 @@
 <template>
   <div>
-    <logo @click.native="$router.push('/profile')"/>
+    <logo @click.native="$route.path !== '/profile' && $router.push('/profile')"/>
     <div class="menu">
       <div v-if="$store.getters.device === 'mobile'" @click="$emit('toggle')" class="toggle">
         <img src="~@/assets/images/menu.png" alt="menu">

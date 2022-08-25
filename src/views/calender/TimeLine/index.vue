@@ -27,8 +27,8 @@
 </template>
 
 <script>
-import FoodItem from './FoodItem'
-import FoodSelect from './FoodSelect'
+import FoodItem from '../children/FoodItem'
+import FoodSelect from '../children/FoodSelect'
 
 export default {
   name: "TimeLine",
@@ -61,14 +61,7 @@ export default {
 }
 </script>
 
-<style>
-@keyframes fade {
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-</style>
+
 
 <style lang="scss">
 @import "~@/assets/styles/variable.scss";
