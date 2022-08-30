@@ -11,17 +11,18 @@ const service = axios.create({
 })
 
 service.interceptors.request.use((config) => {
-  // if(store.getters.token) {
-  //   config.headers['Authorization'] = getToken()
-  // }
-  config.headers['Authorization'] = '0I6ogiJeQkGttEKOrpOUwrDyope0R5ah'
+  if(store.getters.token) {
+    config.headers['Authorization'] = getToken()
+  }
+  // config.headers['Authorization'] = '0I6ogiJeQkGttEKOrpOUwrDyope0R5ah'
   return config
 }, (error) => {
   return Promise.reject(error)
 })
 
 service.interceptors.response.use((response) => {
-  return response.data
+  if (response.data.code == 200) return response.data;
+  return Promise.reject(response.data);
 }, (error) => {
   return Promise.reject(error)
 })

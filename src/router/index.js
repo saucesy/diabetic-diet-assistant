@@ -33,7 +33,7 @@ const routes = [
     component: Layout,
     children: [
       {
-        path: '',
+        path: ':othersID?',
         name: 'Charts',
         component: () => import('@/views/charts'),
         meta: { title: 'Charts', icon: 'chart' }

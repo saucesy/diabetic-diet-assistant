@@ -3,10 +3,10 @@
     <div class="container" v-if="profile">
       <!-- avatar -->
       <div class="d-flex justify-content-center align-items-center mb-4">
-        <b-img v-if="profile.avatar_url" :src="profile.avatar_url" style="object-fit: cover" class="shadow"
+        <b-img v-if="profile.avatar_url" :src="profile.avatar_url" style="object-fit: cover; cursor: pointer;"
+               class="shadow" rounded="circle" width="100" height="100" @click="onAvatarClick"></b-img>
+        <b-img v-else :src="require('@/assets/images/logo-blue.png')" style="cursor: pointer;" class="shadow"
                rounded="circle" width="100" height="100" @click="onAvatarClick"></b-img>
-        <b-img v-else :src="require('@/assets/images/logo-blue.png')" class="shadow" rounded="circle" width="100"
-               height="100" @click="onAvatarClick"></b-img>
 
         <!-- choose avatar -->
         <b-form-file class="avatar-upload" v-model="file" v-show="false" accept="image/*"></b-form-file>
@@ -18,7 +18,9 @@
           <!-- radio -->
           <b-row v-if="item.type === 'radio'" :key="item.key" class="mb-4">
             <b-col sm="3" class="d-inline-flex align-items-center mb-1 mb-md-0">
-              <label class="text-capitalize" :for="`type-${item.key}`">{{ item.key }}</label>
+              <label :for="`type-${item.key}`"><span class="text-capitalize">{{ item.key }}</span>{{
+                  item?.suffix
+                }}</label>
             </b-col>
             <b-col sm="9">
               <b-radio-group class="d-flex" v-model="profile[item.key]">
@@ -33,7 +35,9 @@
           <!-- datepicker -->
           <b-row v-else-if="item.type === 'datepicker'" :key="item.key" class="mb-4">
             <b-col sm="3" class="d-inline-flex align-items-center mb-1 mb-md-0">
-              <label class="text-capitalize" :for="`type-${item.key}`">{{ item.key }}</label>
+              <label :for="`type-${item.key}`"><span class="text-capitalize">{{ item.key }}</span>{{
+                  item?.suffix
+                }}</label>
             </b-col>
             <b-col sm="9">
               <b-datepicker :id="`type-${item.key}`" locale="en" v-model="profile[item.key]"
@@ -44,7 +48,9 @@
           <!-- input -->
           <b-row v-else :key="item.key" class="mb-4">
             <b-col sm="3" class="d-inline-flex align-items-center mb-1 mb-md-0">
-              <label class="text-capitalize" :for="`type-${item.key}`">{{ item.key }}</label>
+              <label :for="`type-${item.key}`"><span class="text-capitalize">{{ item.key }}</span>{{
+                  item?.suffix
+                }}</label>
             </b-col>
             <b-col sm="9">
               <b-form-input :id="`type-${item.key}`" :type="item.type" v-model="profile[item.key]"
@@ -57,11 +63,12 @@
 
       <!-- update -->
       <div class="d-flex justify-content-center align-items-center mt-5" v-if="!othersID">
-        <b-button variant="primary" pill @click="updateProfile">Update</b-button>
+        <b-button variant="primary" pill @click="updateProfile(profile)">Update</b-button>
       </div>
-      <!-- TODO: update remark add apply -->
-      <div class="d-flex justify-content-center align-items-center mt-5" v-else>
-        <b-button variant="primary" pill>Apply to Establish a Relationship</b-button>
+
+      <!-- update remark -->
+      <div class="d-flex justify-content-center align-items-center mt-5" v-else-if="profile.hasOwnProperty('remark')">
+        <b-button variant="primary" pill @click="updateRemark">Update Remark</b-button>
       </div>
     </div>
   </div>
@@ -70,6 +77,7 @@
 <script>
 import {getSelfProfile, updateProfile, getProfile} from '@/api/user';
 import {uploadImage} from '@/api/file';
+import {editRemark} from '@/api/relationship';
 
 export default {
   name: 'Profile',
@@ -77,6 +85,7 @@ export default {
     return {
       // show others profile
       othersID: null,
+      relationship: null,
 
       profile: null,
       // choose avatar
@@ -100,16 +109,23 @@ export default {
         },
         {
           key: 'height',
+          suffix: '(cm)',
           readonly: false,
           type: 'number'
         },
         {
           key: 'weight',
+          suffix: '(kg)',
           readonly: false,
           type: 'number'
         },
         {
           key: 'gender',
+          readonly: false,
+          type: 'text'
+        },
+        {
+          key: 'remark',
           readonly: false,
           type: 'text'
         }
@@ -122,20 +138,28 @@ export default {
   },
   mounted() {
     // get profile
-    let request;
-
     // show others profile
     if (this.othersID) {
       // disable all form
-      this.sort.forEach(item => item.disabled = true);
-      // TODO: relation
-      request = getProfile(this.othersID);
+      this.sort.forEach(item => {
+        if (item.key !== 'remark') item.disabled = true;
+      });
+      getProfile(this.othersID).then(res => {
+        // show remark when has relationship
+        const rela = this.relationship = res.data.relationship;
+        if (rela.relative && rela.status === 1) {
+          res.data.remark = rela.remark;
+        }
+        delete res.data.relationship;
+
+        this.profile = res.data;
+      })
+          .catch(res => this.$message.error(res.msg));
     }
     else {
-      request = getSelfProfile();
+      getSelfProfile().then(res => this.profile = res.data)
+          .catch(res => this.$message.error(res.msg));
     }
-    request.then(res => this.profile = res.data)
-        .catch(res => this.$message.error(res.msg));
   },
   methods: {
     // update profile
@@ -145,6 +169,20 @@ export default {
             .then(res => this.$message.success('Update Success'))
             .catch(res => this.$message.error(res.msg));
       }
+    },
+
+    // update remark
+    updateRemark() {
+      if (this.profile.remark === null) {
+        this.$message.error('Please input remark');
+        return;
+      }
+
+      const data = {
+        id: this.relationship.id,
+        remark: this.profile.remark.trim()
+      };
+      editRemark(data).then(res => this.$message.success('Update Success'));
     },
 
     // choose image

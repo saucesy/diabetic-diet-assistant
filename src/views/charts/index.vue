@@ -54,9 +54,10 @@
             <tr class="child" :key="item.date">
               <td>{{ item.date.substring(5) }}</td>
 
-              <td class="block" v-for="(meal, index2) in item.meal" :key="index2">
-                <div class="face-item" @click="onCellClick(item, meal)">
-                  <b-img class="img" :src="faces[meal.rate].url"></b-img>
+              <td class="block" v-for="(diet, index2) in item.diet" :key="index2">
+                <div class="face-item" @click="onCellClick(item, diet)">
+                  <b-img class="img" :src="faces[diet.rate].url"></b-img>
+                  <span class="text">{{ diet.carbohydrate }}</span>
                 </div>
               </td>
             </tr>
@@ -78,6 +79,7 @@
 
 <script>
 import {dataList} from '@/views/charts/data';
+import {getList, getCustomList} from '@/api/analyse';
 // import echarts
 import * as echarts from 'echarts/core';
 import {
@@ -112,22 +114,31 @@ export default {
   data() {
     return {
       // data
-      dataList: dataList,
+      dataList: [],
+      othersID: null,
 
       // options
       current: 0,
       options: [
         {
-          label: 'Last 7 days',
+          label: 'Recent 7 days',
           days: 7
         },
         {
-          label: 'Last 14 days',
+          label: 'Recent 14 days',
           days: 7
         },
         {
-          label: 'Last 3 months',
+          label: 'Recent 1 month',
+          days: 30
+        },
+        {
+          label: 'Recent 3 months',
           days: 7
+        },
+        {
+          label: 'Custom',
+          days: 0
         }
       ],
 
@@ -168,37 +179,57 @@ export default {
     };
   },
   created() {
+    this.othersID = this.$route.params.othersID ?? null;
     this.defaultDisplay = Object.assign({}, this.display);
   },
   mounted() {
-    const date = [];
-    const carbohydrate = [];
-    const average_rate = [];
-    for (let i = this.dataList.length - 1; i >= 0; i--) {
-      const item = this.dataList[i];
-      date.push(item.date);
-      carbohydrate.push(item.carbohydrate);
-      average_rate.push(item.average_rate);
-    }
-    this.$nextTick(() => {
-      this.initChart(date, carbohydrate, average_rate);
-    });
+    this.getData(this.options[0].days);
 
     window.onresize = () => {
       if (this.mChart) this.mChart.resize();
     };
   },
   methods: {
+    // getData
+    getData(days = 0, date_from = null, date_to = null) {
+      const userID = this.othersID || this.$store.getters.token;
+
+      let request;
+      // get by days
+      if (days !== 0) request = getList(userID, days);
+      // get by date range
+      else if (date_from && date_to) request = getList(userID, date_from, date_to);
+      request.then(res => {
+        this.dataList = res.data;
+
+        // process charts data
+        const date = [];
+        const carbohydrate = [];
+        const average_rate = [];
+        for (let i = this.dataList.length - 1; i >= 0; i--) {
+          const item = this.dataList[i];
+          date.push(item.date);
+          carbohydrate.push(item.carbohydrate);
+          average_rate.push(item.average_rate);
+        }
+        this.$nextTick(() => {
+          this.initChart(date, carbohydrate, average_rate);
+        });
+
+
+      }).catch(res => this.$message.error(res.msg));
+    },
+
     // choose option
     onOptionClick(index, item) {
       this.current = index;
     },
 
     // choose cell
-    onCellClick(item, meal) {
-      this.display.title = meal.meal_name ? `${meal.meal_name}(${item.date})` : item.date;
-      this.display.remark = meal.remark ? `Remark: ${meal.remark}` : 'No Remark';
-      this.display.rate = meal.rate;
+    onCellClick(item, diet) {
+      this.display.title = `${diet.name ?? ''}(${diet.date}${diet.time ? ' ' + diet.time : ''})`;
+      this.display.remark = diet.remark ? `Remark: ${diet.remark}` : 'No Remark';
+      this.display.rate = diet.rate;
     },
 
     // export excel
@@ -219,10 +250,16 @@ export default {
       let myChart = echarts.init(this.$refs.chart);
       let option = {
         tooltip: {
-          trigger: 'axis'
+          trigger: 'axis',
+          axisPointer: {
+            type: 'cross'
+          }
         },
         legend: {
           left: '0'
+        },
+        grid: {
+          top: '85px'
         },
         toolbox: {
           show: true,
@@ -239,57 +276,48 @@ export default {
         xAxis: {
           type: 'category',
           boundaryGap: false,
-          data: xAxis
-        },
-        yAxis: {
-          type: 'value',
-          axisLabel: {
-            formatter: '{value}'
+          data: xAxis,
+          axisTick: {
+            alignWithLabel: true
           }
         },
+        yAxis: [
+          {
+            type: 'value',
+            name: 'Carbohydrate',
+            position: 'left',
+            alignTicks: true,
+            axisLine: {
+              show: true
+            },
+            axisLabel: {
+              formatter: '{value}'
+            }
+          },
+          {
+            type: 'value',
+            name: 'Blood glucose satisfaction',
+            position: 'right',
+            alignTicks: true,
+            axisLine: {
+              show: true
+            },
+            axisLabel: {
+              formatter: '{value}'
+            }
+          }
+        ],
         series: [
           {
             name: 'Carbohydrate',
             type: 'line',
-            data: carbohydrate,
-            markPoint: {
-              data: [
-                {type: 'max', name: 'Max'},
-                {type: 'min', name: 'Min'}
-              ]
-            },
-            markLine: {
-              data: [{type: 'average', name: 'Avg'}]
-            }
+            data: carbohydrate
           },
           {
             name: 'Blood glucose satisfaction',
             type: 'line',
             data: average_rate,
-            markPoint: {
-              data: [{name: '周最低', value: -2, xAxis: 1, yAxis: -1.5}]
-            },
-            markLine: {
-              data: [
-                {type: 'average', name: 'Avg'},
-                [
-                  {
-                    symbol: 'none',
-                    x: '90%',
-                    yAxis: 'max'
-                  },
-                  {
-                    symbol: 'circle',
-                    label: {
-                      position: 'start',
-                      formatter: 'Max'
-                    },
-                    type: 'max',
-                    name: '最高点'
-                  }
-                ]
-              ]
-            }
+            yAxisIndex: 1
           }
         ]
       };
@@ -380,6 +408,7 @@ export default {
 
   // face-item
   .face-item {
+    user-select: none;
     flex: 1;
     flex-shrink: 0;
     text-align: center;
@@ -442,10 +471,17 @@ export default {
         border-radius: 2px;
         min-width: 28px;
         min-height: 32px;
+        padding: .35rem .1rem .1rem;
         display: flex;
+        flex-direction: column;
         justify-content: center;
         align-items: center;
         background-color: #D1D1D1;
+
+        .text {
+          color: #595959;
+          margin-top: 0;
+        }
       }
     }
   }

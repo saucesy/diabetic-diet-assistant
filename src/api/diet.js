@@ -5,7 +5,7 @@ export function getByDate(date) {
 }
 
 export function update(data) {
-  return request({url: '/diet', method: 'put', data})
+  // return request({url: '/diet', method: 'put', data})
 }
 
 export function mealFeedback(data) {
