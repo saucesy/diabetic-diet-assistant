@@ -4,12 +4,20 @@
     <div class="charts-card top">
       <!-- header -->
       <div class="top-header">
-        <span v-for="(item, index) in options"
-              :key="item.label"
-              :class="{ active: index === current }"
-              @click="onOptionClick(index, item)">
-          {{ item.label }}
-        </span>
+        <template v-for="(item, index) in options">
+          <span v-if="item.days > 0"
+                :key="item.label"
+                :class="{ active: index === current }"
+                @click="onOptionClick(index, item)">
+            {{ item.label }}
+          </span>
+          <span v-else
+                :key="item.label"
+                :class="{ active: index === current }"
+                v-b-modal.modal>
+            {{ item.label }}
+          </span>
+        </template>
       </div>
 
       <!-- info -->
@@ -74,6 +82,11 @@
       </div>
       <div class="bottom-chart" ref="chart"></div>
     </div>
+
+    <!-- date modal -->
+    <b-modal id="modal" title="Select Date">
+      <p class="my-4">Hello from modal!</p>
+    </b-modal>
   </div>
 </template>
 
@@ -89,7 +102,8 @@ import {
   GridComponent,
   LegendComponent,
   MarkLineComponent,
-  MarkPointComponent
+  MarkPointComponent,
+  DataZoomComponent
 } from 'echarts/components';
 import {LineChart, BarChart} from 'echarts/charts';
 import {UniversalTransition} from 'echarts/features';
@@ -106,7 +120,8 @@ echarts.use([
   LineChart,
   BarChart,
   CanvasRenderer,
-  UniversalTransition
+  UniversalTransition,
+  DataZoomComponent
 ]);
 
 export default {
@@ -126,7 +141,7 @@ export default {
         },
         {
           label: 'Recent 14 days',
-          days: 7
+          days: 14
         },
         {
           label: 'Recent 1 month',
@@ -134,7 +149,7 @@ export default {
         },
         {
           label: 'Recent 3 months',
-          days: 7
+          days: 90
         },
         {
           label: 'Custom',
@@ -223,6 +238,16 @@ export default {
     // choose option
     onOptionClick(index, item) {
       this.current = index;
+
+      // days
+      if (item.days !== 0) {
+        this.getData(item.days);
+      }
+      // custom
+      else {
+
+      }
+
     },
 
     // choose cell
@@ -240,12 +265,18 @@ export default {
     // init chart
     initChart(xAxis, carbohydrate, average_rate) {
       let toolboxSettings = {};
+      let dataZoomEnd = 100;
       if (document.body.offsetWidth < 1000) {
         toolboxSettings = {
           left: '0',
           top: '20px'
         };
       }
+      if (carbohydrate.length < 14) dataZoomEnd = 100;
+      else if (carbohydrate.length < 21) dataZoomEnd = 80;
+      else if (carbohydrate.length < 28) dataZoomEnd = 60;
+      else if (carbohydrate.length < 35) dataZoomEnd = 40;
+      else dataZoomEnd = 20;
 
       let myChart = echarts.init(this.$refs.chart);
       let option = {
@@ -264,15 +295,26 @@ export default {
         toolbox: {
           show: true,
           feature: {
-            dataZoom: {
-              yAxisIndex: 'none'
-            },
+            // dataZoom: {
+            //   yAxisIndex: 'none'
+            // },
             magicType: {type: ['line', 'bar']},
-            restore: {},
+            // restore: {},
             saveAsImage: {}
           },
           ...toolboxSettings
         },
+        dataZoom: [
+          {
+            type: 'inside',
+            start: 0,
+            end: dataZoomEnd
+          },
+          {
+            start: 0,
+            end: dataZoomEnd
+          }
+        ],
         xAxis: {
           type: 'category',
           boundaryGap: false,
@@ -477,10 +519,12 @@ export default {
         justify-content: center;
         align-items: center;
         background-color: #D1D1D1;
+        height: 60px;
 
         .text {
           color: #595959;
           margin-top: 0;
+          font-size: 14px;
         }
       }
     }
