@@ -4,20 +4,12 @@
     <div class="charts-card top">
       <!-- header -->
       <div class="top-header">
-        <template v-for="(item, index) in options">
-          <span v-if="item.days > 0"
-                :key="item.label"
-                :class="{ active: index === current }"
-                @click="onOptionClick(index, item)">
-            {{ item.label }}
-          </span>
-          <span v-else
-                :key="item.label"
-                :class="{ active: index === current }"
-                v-b-modal.modal>
-            {{ item.label }}
-          </span>
-        </template>
+        <span v-for="(item, index) in options"
+              :key="item.label"
+              :class="{ active: index === current }"
+              @click="onOptionClick(index, item)">
+          {{ item.label }}
+        </span>
       </div>
 
       <!-- info -->
@@ -85,13 +77,24 @@
 
     <!-- date modal -->
     <b-modal id="modal" title="Select Date">
-      <p class="my-4">Hello from modal!</p>
+      <div>
+        <label for="datepicker-1">Select start time</label>
+        <b-form-datepicker id="datepicker-1" class="mb-2" v-model="timeFrom"></b-form-datepicker>
+        <label for="datepicker-2">Select end time</label>
+        <b-form-datepicker id="datepicker-2" v-model="timeTo"></b-form-datepicker>
+      </div>
+
+      <template v-slot:modal-footer>
+        <b-button @click="closeModal">Cancel</b-button>
+        <b-button variant="primary" @click="selectDate">OK</b-button>
+      </template>
     </b-modal>
+
+    <el-backtop></el-backtop>
   </div>
 </template>
 
 <script>
-import {dataList} from '@/views/charts/data';
 import {getList, getCustomList} from '@/api/analyse';
 // import echarts
 import * as echarts from 'echarts/core';
@@ -131,6 +134,11 @@ export default {
       // data
       dataList: [],
       othersID: null,
+
+      // time
+      showingParams: {},
+      timeFrom: null,
+      timeTo: null,
 
       // options
       current: 0,
@@ -194,26 +202,41 @@ export default {
     };
   },
   created() {
+    // get specified user id
     this.othersID = this.$route.params.othersID ?? null;
+    // set display data
     this.defaultDisplay = Object.assign({}, this.display);
-  },
-  mounted() {
+
+    // get data
     this.getData(this.options[0].days);
 
+    // resize echarts
     window.onresize = () => {
       if (this.mChart) this.mChart.resize();
     };
   },
   methods: {
-    // getData
+    /**
+     * get analyse data
+     *
+     * @param days
+     * @param date_from
+     * @param date_to
+     */
     getData(days = 0, date_from = null, date_to = null) {
       const userID = this.othersID || this.$store.getters.token;
+      this.showingParams = {
+        user: userID,
+        days: days,
+        from: date_from,
+        to: date_to
+      };
 
       let request;
       // get by days
       if (days !== 0) request = getList(userID, days);
       // get by date range
-      else if (date_from && date_to) request = getList(userID, date_from, date_to);
+      else if (date_from && date_to) request = getCustomList(userID, date_from, date_to);
       request.then(res => {
         this.dataList = res.data;
 
@@ -224,45 +247,89 @@ export default {
         for (let i = this.dataList.length - 1; i >= 0; i--) {
           const item = this.dataList[i];
           date.push(item.date);
-          carbohydrate.push(item.carbohydrate);
-          average_rate.push(item.average_rate);
+          carbohydrate.push(item.carbohydrate.toFixed(2));
+          average_rate.push(item.average_rate.toFixed(2));
         }
         this.$nextTick(() => {
           this.initChart(date, carbohydrate, average_rate);
         });
 
-
       }).catch(res => this.$message.error(res.msg));
     },
 
-    // choose option
+    /**
+     * choose option
+     *
+     * @param index
+     * @param item
+     */
     onOptionClick(index, item) {
       this.current = index;
 
-      // days
-      if (item.days !== 0) {
-        this.getData(item.days);
-      }
-      // custom
-      else {
-
-      }
-
+      // get by days
+      if (item.days > 0) this.getData(item.days);
+      // get by custom date
+      else this.showModal();
     },
 
-    // choose cell
+    /**
+     * custom date range
+     */
+    selectDate() {
+      console.log(+new Date(this.timeFrom), +new Date(this.timeTo), +new Date());
+      if (this.timeFrom === null || this.timeTo === null) {
+        this.$message.error('Please select date!');
+        return;
+      }
+      const today = new Date();
+      today.setDate(today.getDate() + 1);
+      if (+new Date(this.timeTo) > +today) {
+        this.$message.error('End time cannot be greater than today!');
+        return;
+      }
+      if (+new Date(this.timeFrom) >= +new Date(this.timeTo)) {
+        this.$message.error('Start time needs to be less than end time!');
+        return;
+      }
+
+      this.getData(0, this.timeFrom, this.timeTo);
+      this.closeModal();
+    },
+
+    /**
+     * choose cell
+     *
+     * @param item
+     * @param diet
+     */
     onCellClick(item, diet) {
       this.display.title = `${diet.name ?? ''}(${diet.date}${diet.time ? ' ' + diet.time : ''})`;
       this.display.remark = diet.remark ? `Remark: ${diet.remark}` : 'No Remark';
       this.display.rate = diet.rate;
     },
 
-    // export excel
+    /**
+     * export excel
+     */
     exportExcel() {
+      let str = '';
+      if (this.showingParams.days !== 0) {
+        str = this.showingParams.days;
+      }
+      else {
+        str = `${this.showingParams.from}/${this.showingParams.to}`;
+      }
 
+      window.open(`${process.env['VUE_APP_BASE_URL']}/analyse/export/${this.showingParams.user}/${str}/${+new Date()}`);
     },
 
-    // init chart
+    /**
+     * init chart
+     *
+     * @param xAxis
+     * @param carbohydrate
+     * @param average_rate
+     */
     initChart(xAxis, carbohydrate, average_rate) {
       let toolboxSettings = {};
       let dataZoomEnd = 100;
@@ -365,6 +432,16 @@ export default {
       };
 
       this.mChart = option && myChart.setOption(option);
+    },
+
+    /**
+     * close modal
+     */
+    closeModal() {
+      this.$bvModal.hide('modal');
+    },
+    showModal() {
+      this.$bvModal.show('modal');
     }
   }
 };
@@ -391,12 +468,13 @@ export default {
     }
 
     &.bottom {
-      height: 70vh;
+      height: 100%;
+      min-height: calc(100vh - 30px);
 
-      @media (min-width: 1000px) {
+      /*@media (min-width: 1000px) {
         min-height: calc(100vh - 30px);
         height: 100%;
-      }
+      }*/
     }
   }
 
