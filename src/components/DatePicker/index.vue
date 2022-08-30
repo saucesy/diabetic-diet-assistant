@@ -35,7 +35,7 @@ export default {
 
     onPickerChange(type) {
       this.value = this.getDate(type === 'pre' ? -1 : 1)
-      this.$emit('onchange', this.date)
+      this.$emit('change', this.date)
     }
   }
 }

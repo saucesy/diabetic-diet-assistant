@@ -5,11 +5,11 @@
       <span>Click Add Food...</span>
     </div>
     <div class="food-select__content" :class="{'display': isDisplay, 'reach-bottom': isReachBottom}">
-      <div class="food-select__option" @click="onSaveFood(food)" v-for="food of foodList" :key="food.id">
+      <div class="option" @click="onSaveFood(food)" v-for="food of foodList" :key="food.id">
         <span class="name">{{ food.name }}</span>
         <div class="tag">
-          <el-tag size="small" :style="getColorByGi(food.gi)">gi:{{food.gi}}</el-tag>
-          <el-tag size="small">carbs:{{food.carbohydrate}}</el-tag>
+          <el-tag size="small" :style="getColorByGi(food.gi)">gi:{{ food.gi }}</el-tag>
+          <el-tag size="small">carbs:{{ food.carbohydrate }}</el-tag>
         </div>
       </div>
     </div>
@@ -17,53 +17,37 @@
 </template>
 
 <script>
-import FoodButton from './FoodButton'
 
 export default {
-  name: "FoodSelect",
+  name: 'calenderPostingFoodSelect',
   props: {
     foodList: {
       type: Array,
-      required: true
+      required: true,
     },
-    color: String
-  },
-  components: {
-    FoodButton
   },
   data() {
     return {
       isDisplay: false,
-      isReachBottom: false
+      isReachBottom: false,
     }
   },
   methods: {
     getColorByGi(gi) {
-      if(gi <= 55) {
-        return {
-          color: '#F1F5FF',
-          backgroundColor: '#4F80E4'
-        }
-      }
-      else if(gi > 55 && gi <= 75) {
-        return {
-          color: '#FFF1D1',
-          backgroundColor: '#FFC107'
-        }
-      }
-      else  {
-        return {
-          color: '#FEF4F2',
-          backgroundColor: '#F8A292'
-        }
+      if (gi <= 55) {
+        return {color: '#F1F5FF', backgroundColor: '#4F80E4'}
+      } else if (gi > 55 && gi <= 75) {
+        return {color: '#FFF1D1', backgroundColor: '#FFC107'}
+      } else {
+        return {color: '#FEF4F2', backgroundColor: '#F8A292'}
       }
     },
     onSaveFood(food) {
       this.isDisplay = false
       this.$emit('change', food)
-      this.isReachBottom = Math.abs(this.$refs.foodSelectRef.getBoundingClientRect().bottom - document.body.clientHeight) <= 260;
-    }
-  }
+      this.isReachBottom = Math.abs(this.$refs.foodSelectRef.getBoundingClientRect().bottom - document.body.clientHeight) <= 200
+    },
+  },
 }
 </script>
 
@@ -127,10 +111,11 @@ export default {
       top: 20px;
       transform: translateY(-100%);
 
-      .food-select__option {
+      .option {
         &:first-child {
           padding: 10px;
         }
+
         &:last-child {
           padding-bottom: 30px;
         }
@@ -140,30 +125,30 @@ export default {
     &::-webkit-scrollbar {
       display: none;
     }
-  }
 
-  &__option {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 10px;
-    cursor: pointer;
-    border-bottom: 1px solid #eee;
+    .option {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px;
+      cursor: pointer;
+      border-bottom: 1px solid #eee;
 
-    color: #555;
-    font-size: 14px;
-    transition: background-color .3s;
+      color: #555;
+      font-size: 14px;
+      transition: background-color .3s;
 
-    &:hover {
-      background-color: #f3f1f1;
-    }
+      &:hover {
+        background-color: #f3f1f1;
+      }
 
-    &:first-child {
-      padding-top: 20px;
-    }
+      &:first-child {
+        padding-top: 20px;
+      }
 
-    .el-tag {
-      margin-right: 10px;
+      .el-tag {
+        margin-right: 10px;
+      }
     }
   }
 }

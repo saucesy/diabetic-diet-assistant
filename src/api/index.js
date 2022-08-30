@@ -14,15 +14,13 @@ service.interceptors.request.use((config) => {
   if(store.getters.token) {
     config.headers['Authorization'] = getToken()
   }
-  // config.headers['Authorization'] = '0I6ogiJeQkGttEKOrpOUwrDyope0R5ah'
   return config
 }, (error) => {
   return Promise.reject(error)
 })
 
 service.interceptors.response.use((response) => {
-  if (response.data.code == 200) return response.data;
-  return Promise.reject(response.data);
+  return response.data
 }, (error) => {
   return Promise.reject(error)
 })
