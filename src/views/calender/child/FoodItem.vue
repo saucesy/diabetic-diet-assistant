@@ -41,7 +41,7 @@ export default {
 @keyframes fade {
   to {
     opacity: 1;
-    transform: translateY(0);
+    transform: translateX(0);
   }
 }
 </style>
@@ -49,17 +49,22 @@ export default {
 <style lang="scss">
 @import "~@/assets/styles/variable.scss";
 
+$height: 45px;
+
 .food-item {
-  height: 45px;
+  height: $height;
+  line-height: $height;
+
   padding: 0 20px;
   margin-bottom: 20px;
-  line-height: 45px;
   border-radius: 20px;
-  opacity: 0;
-  transform: translateY(30px);
-  animation: fade .3s forwards;
+
   color: $low-gi-font;
   background-color: $low-gi-bg;
+
+  opacity: 0;
+  transform: translateX(50px);
+  animation: fade .3s forwards;
 
   &.high {
     color: $high-gi-font;

@@ -199,12 +199,7 @@ export default {
 
   .main-container {
     position: relative;
-    min-height: 100%;
     background-color: #ecf0f3;
-
-    .app-main {
-      height: 100%;
-    }
   }
 }
 </style>
