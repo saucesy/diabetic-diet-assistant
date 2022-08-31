@@ -86,16 +86,10 @@
 </template>
 
 <script>
-<<<<<<< HEAD
-import {getSelfProfile, updateProfile, getProfile} from '@/api/user'
-import {uploadImage} from '@/api/file'
-import {editRemark} from '@/api/relationship'
-=======
 import {getSelfProfile, updateProfile, getProfile} from '@/api/user';
 import {uploadImage} from '@/api/file';
 import {editRemark} from '@/api/relationship';
 import {inputSort} from '@/views/profile/props';
->>>>>>> 886eda0a25e9fac25f44d509945bb86487044fde
 
 export default {
   name: 'Profile',
@@ -109,85 +103,19 @@ export default {
       profile: null,
       // chose avatar
       file: null,
-<<<<<<< HEAD
-      sort: [
-        {
-          key: 'username',
-          readonly: true,
-          type: 'text',
-          disabled: true,
-        },
-        {
-          key: 'email',
-          readonly: false,
-          type: 'email',
-        },
-        {
-          key: 'birthday',
-          readonly: false,
-          type: 'datepicker',
-        },
-        {
-          key: 'height',
-          suffix: '(cm)',
-          readonly: false,
-          type: 'number',
-        },
-        {
-          key: 'weight',
-          suffix: '(kg)',
-          readonly: false,
-          type: 'number',
-        },
-        {
-          key: 'gender',
-          readonly: false,
-          type: 'text',
-        },
-        {
-          key: 'remark',
-          readonly: false,
-          type: 'text',
-        },
-      ],
-    }
-=======
       // input sort
       sort: inputSort
     };
->>>>>>> 886eda0a25e9fac25f44d509945bb86487044fde
   },
   created() {
-<<<<<<< HEAD
-    this.othersID = this.$route.params.othersID ?? null
-=======
     // get show id
     this.othersID = this.$route.params.othersID ?? null;
->>>>>>> 886eda0a25e9fac25f44d509945bb86487044fde
   },
   mounted() {
     // get others profile
     if (this.othersID) {
       // disable all form
       this.sort.forEach(item => {
-<<<<<<< HEAD
-        if (item.key !== 'remark') item.disabled = true
-      })
-      getProfile(this.othersID).then(res => {
-            // show remark when has relationship
-            const rela = this.relationship = res.data.relationship
-            if (rela.relative && rela.status === 1) {
-              res.data.remark = rela.remark
-            }
-            delete res.data.relationship
-
-            this.profile = res.data
-          })
-          .catch(res => this.$message.error(res.msg))
-    } else {
-      getSelfProfile().then(res => this.profile = res.data)
-          .catch(res => this.$message.error(res.msg))
-=======
         if (item.key !== 'remark') item.disabled = true;
       });
       getProfile(this.othersID).then(res => {
@@ -212,7 +140,6 @@ export default {
             // uses element-ui message
             this.$message.error(res.msg);
           });
->>>>>>> 886eda0a25e9fac25f44d509945bb86487044fde
     }
   },
   methods: {
@@ -226,7 +153,7 @@ export default {
         updateProfile(profile)
             // uses element-ui message
             .then(res => this.$message.success('Update Success'))
-            .catch(res => this.$message.error(res.msg))
+            .catch(res => this.$message.error(res.msg));
       }
     },
 
@@ -235,29 +162,18 @@ export default {
      */
     updateRemark() {
       if (this.profile.remark === null) {
-<<<<<<< HEAD
-        this.$message.error('Please input remark')
-        return
-=======
         // uses element-ui message
         this.$message.error('Please input remark');
         return;
->>>>>>> 886eda0a25e9fac25f44d509945bb86487044fde
       }
 
       const data = {
         id: this.relationship.id,
-<<<<<<< HEAD
-        remark: this.profile.remark.trim(),
-      }
-      editRemark(data).then(res => this.$message.success('Update Success'))
-=======
         remark: this.profile.remark.trim()
       };
 
       // uses element-ui message
       editRemark(data).then(res => this.$message.success('Update Success'));
->>>>>>> 886eda0a25e9fac25f44d509945bb86487044fde
     },
 
     /**
@@ -265,9 +181,9 @@ export default {
      */
     onAvatarClick() {
       if (!this.othersID) {
-        document.querySelector('.avatar-upload .custom-file-input').click()
+        document.querySelector('.avatar-upload .custom-file-input').click();
       }
-    },
+    }
   },
   watch: {
     /**
@@ -279,20 +195,16 @@ export default {
       if (file) {
         uploadImage(file)
             .then(res => {
-              this.profile.avatar_url = res.data.url
+              this.profile.avatar_url = res.data.url;
               // update profile
-              this.updateProfile({avatar: res.data.upload_url})
+              this.updateProfile({avatar: res.data.upload_url});
             })
-<<<<<<< HEAD
-            .catch(res => this.$message.error('Upload error!'))
-=======
             // uses element-ui message
             .catch(res => this.$message.error('Upload error!'));
->>>>>>> 886eda0a25e9fac25f44d509945bb86487044fde
       }
-    },
-  },
-}
+    }
+  }
+};
 </script>
 
 <style lang="scss" scoped>

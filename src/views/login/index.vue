@@ -10,12 +10,8 @@
             <!-- uses vue transition-group -->
             <TransitionGroup name="fade-move" mode="out-in" tag="div">
               <!-- login -->
-<<<<<<< HEAD
               <div v-show="current === 0" key="login">
-=======
-              <div v-show="current == 0" key="login">
                 <!-- uses bootstrap card -->
->>>>>>> 886eda0a25e9fac25f44d509945bb86487044fde
                 <b-card-body class="p-5">
                   <h3 class="text-center mb-4 fw-normal">Welcome Back!</h3>
 
@@ -24,19 +20,19 @@
                   <b-form class="py-2">
                     <!-- Username -->
                     <b-input
-                      class="rounded-pill fs-6"
-                      v-model="username"
-                      trim
-                      placeholder="Username"
-                      required
-                      @blur="showError.username = true"
-                      size="lg"
+                        class="rounded-pill fs-6"
+                        v-model="username"
+                        trim
+                        placeholder="Username"
+                        required
+                        @blur="showError.username = true"
+                        size="lg"
                     >
                     </b-input>
                     <div class="validate-line">
                       <b-form-invalid-feedback
-                        :state="false"
-                        :class="{
+                          :state="false"
+                          :class="{
                           invisible: !showError.username || validation.username
                         }"
                       >
@@ -46,20 +42,20 @@
 
                     <!-- Password -->
                     <b-input
-                      class="rounded-pill fs-6"
-                      v-model="password"
-                      trim
-                      placeholder="Password"
-                      type="password"
-                      required
-                      @blur="showError.password = true"
-                      size="lg"
+                        class="rounded-pill fs-6"
+                        v-model="password"
+                        trim
+                        placeholder="Password"
+                        type="password"
+                        required
+                        @blur="showError.password = true"
+                        size="lg"
                     >
                     </b-input>
                     <div class="validate-line">
                       <b-form-invalid-feedback
-                        :state="false"
-                        :class="{
+                          :state="false"
+                          :class="{
                           invisible: !showError.password || validation.password
                         }"
                       >
@@ -69,8 +65,8 @@
 
                     <!-- Remember -->
                     <b-form-checkbox
-                      v-model="remember"
-                      class="
+                        v-model="remember"
+                        class="
                         text-secondary
                         ms-1
                         user-select-none
@@ -84,21 +80,21 @@
                   <!-- Confirm -->
                   <!-- uses bootstrap button -->
                   <b-button
-                    block
-                    variant="primary"
-                    pill
-                    class="mt-2 w-100 d-block"
-                    @click="login"
-                    >Login</b-button
+                      block
+                      variant="primary"
+                      pill
+                      class="mt-2 w-100 d-block"
+                      @click="login"
+                  >Login</b-button
                   >
 
                   <!-- Link -->
                   <div class="text-center mt-3">
                     <!-- uses bootstrap link -->
                     <b-link
-                      class="text-secondary option-link"
-                      @click="changeTab(1)"
-                      >Create an Account</b-link
+                        class="text-secondary option-link"
+                        @click="changeTab(1)"
+                    >Create an Account</b-link
                     >
                   </div>
                 </b-card-body>
@@ -115,19 +111,19 @@
                   <b-form class="py-2">
                     <!-- Username -->
                     <b-input
-                      class="rounded-pill fs-6"
-                      v-model="username"
-                      trim
-                      placeholder="Username"
-                      required
-                      @blur="showError.username = true"
-                      size="lg"
+                        class="rounded-pill fs-6"
+                        v-model="username"
+                        trim
+                        placeholder="Username"
+                        required
+                        @blur="showError.username = true"
+                        size="lg"
                     >
                     </b-input>
                     <div class="validate-line">
                       <b-form-invalid-feedback
-                        :state="false"
-                        :class="{
+                          :state="false"
+                          :class="{
                           invisible: !showError.username || validation.username
                         }"
                       >
@@ -137,20 +133,20 @@
 
                     <!-- Email -->
                     <b-input
-                      class="rounded-pill fs-6"
-                      v-model="email"
-                      trim
-                      placeholder="Email"
-                      type="email"
-                      required
-                      @blur="showError.email = true"
-                      size="lg"
+                        class="rounded-pill fs-6"
+                        v-model="email"
+                        trim
+                        placeholder="Email"
+                        type="email"
+                        required
+                        @blur="showError.email = true"
+                        size="lg"
                     >
                     </b-input>
                     <div class="validate-line">
                       <b-form-invalid-feedback
-                        :state="false"
-                        :class="{
+                          :state="false"
+                          :class="{
                           invisible: !showError.email || validation.email
                         }"
                       >
@@ -160,20 +156,20 @@
 
                     <!-- Password -->
                     <b-input
-                      class="rounded-pill fs-6"
-                      v-model="password"
-                      trim
-                      placeholder="Password"
-                      type="password"
-                      required
-                      @blur="showError.password = true"
-                      size="lg"
+                        class="rounded-pill fs-6"
+                        v-model="password"
+                        trim
+                        placeholder="Password"
+                        type="password"
+                        required
+                        @blur="showError.password = true"
+                        size="lg"
                     >
                     </b-input>
                     <div class="validate-line">
                       <b-form-invalid-feedback
-                        :state="false"
-                        :class="{
+                          :state="false"
+                          :class="{
                           invisible: !showError.password || validation.password2
                         }"
                       >
@@ -183,8 +179,8 @@
 
                     <!-- Policy -->
                     <b-form-checkbox
-                      v-model="policy"
-                      class="
+                        v-model="policy"
+                        class="
                         text-secondary
                         ms-1
                         user-select-none
@@ -206,21 +202,21 @@
                   <!-- Confirm -->
                   <!-- uses bootstrap button -->
                   <b-button
-                    block
-                    variant="primary"
-                    pill
-                    class="mt-2 w-100 d-block"
-                    @click="register"
-                    >Register Account
+                      block
+                      variant="primary"
+                      pill
+                      class="mt-2 w-100 d-block"
+                      @click="register"
+                  >Register Account
                   </b-button>
 
                   <!-- Link -->
                   <div class="text-center mt-3">
                     <!-- uses bootstrap link -->
                     <b-link
-                      class="text-secondary option-link"
-                      @click="changeTab(0)"
-                      >Already have an account? Login!
+                        class="text-secondary option-link"
+                        @click="changeTab(0)"
+                    >Already have an account? Login!
                     </b-link>
                   </div>
                 </b-card-body>
@@ -249,33 +245,33 @@
 
                     <!-- Timepicker -->
                     <b-datepicker
-                      class="rounded-pill fs-6 mt-3"
-                      v-model="profile.birthday"
-                      locale="en"
-                      size="lg"
+                        class="rounded-pill fs-6 mt-3"
+                        v-model="profile.birthday"
+                        locale="en"
+                        size="lg"
                     ></b-datepicker>
 
                     <!-- Height -->
                     <b-input
-                      class="rounded-pill fs-6 mt-4"
-                      v-model.number="profile.height"
-                      trim
-                      placeholder="Height(cm)"
-                      type="number"
-                      required
-                      size="lg"
+                        class="rounded-pill fs-6 mt-4"
+                        v-model.number="profile.height"
+                        trim
+                        placeholder="Height(cm)"
+                        type="number"
+                        required
+                        size="lg"
                     >
                     </b-input>
 
                     <!-- Weight -->
                     <b-input
-                      class="rounded-pill fs-6 mt-4"
-                      v-model.number="profile.weight"
-                      trim
-                      placeholder="Weight(kg)"
-                      type="number"
-                      required
-                      size="lg"
+                        class="rounded-pill fs-6 mt-4"
+                        v-model.number="profile.weight"
+                        trim
+                        placeholder="Weight(kg)"
+                        type="number"
+                        required
+                        size="lg"
                     >
                     </b-input>
                   </b-form>
@@ -283,20 +279,20 @@
                   <!-- Confirm -->
                   <!-- uses bootstrap button -->
                   <b-button
-                    block
-                    variant="primary"
-                    pill
-                    class="mt-4 w-100 d-block"
-                    @click="updateProfile"
-                    >Update
+                      block
+                      variant="primary"
+                      pill
+                      class="mt-4 w-100 d-block"
+                      @click="updateProfile"
+                  >Update
                   </b-button>
                   <b-button
-                    block
-                    variant="primary"
-                    pill
-                    class="mt-4 w-100 d-block"
-                    @click="changeTab(0)"
-                    >Skip</b-button
+                      block
+                      variant="primary"
+                      pill
+                      class="mt-4 w-100 d-block"
+                      @click="changeTab(0)"
+                  >Skip</b-button
                   >
                 </b-card-body>
               </div>
@@ -422,17 +418,17 @@ export default {
       // login
       else {
         store
-          .dispatch('login', {
-            username: this.username,
-            password: md5(this.password).toString(),
-            remember: this.remember
-          })
-          .then(() => {
-            // uses element-ui message
-            this.$message.success('Login success')
-            // to home
-            setTimeout(() => this.$router.push({path: '/'}), 1000);
-          })
+            .dispatch('login', {
+              username: this.username,
+              password: md5(this.password).toString(),
+              remember: this.remember
+            })
+            .then(() => {
+              // uses element-ui message
+              this.$message.success('Login success')
+              // to home
+              setTimeout(() => this.$router.push({path: '/'}), 1000);
+            })
       }
     },
 
@@ -444,9 +440,9 @@ export default {
       this.doValidate()
 
       if (
-        !this.validation.username ||
-        !this.validation.password2 ||
-        !this.validation.email
+          !this.validation.username ||
+          !this.validation.password2 ||
+          !this.validation.email
       ) {
         this.alertComplete()
       } else if (!this.policy) {
@@ -455,18 +451,18 @@ export default {
       // register
       else {
         store
-          .dispatch('register', {
-            username: this.username,
-            password: md5(this.password).toString(),
-            email: this.email
-          })
-          .then((res) => {
-            this.userID = res.data
-            // uses element-ui message
-            this.$message.success('Register success')
-            // to profile tab
-            setTimeout(() => this.changeTab(2), 1000)
-          })
+            .dispatch('register', {
+              username: this.username,
+              password: md5(this.password).toString(),
+              email: this.email
+            })
+            .then((res) => {
+              this.userID = res.data
+              // uses element-ui message
+              this.$message.success('Register success')
+              // to profile tab
+              setTimeout(() => this.changeTab(2), 1000)
+            })
       }
     },
 
@@ -495,16 +491,16 @@ export default {
           updateProfile(profile, {
             Authorization: this.userID
           })
-            .then((res) => {
-              // uses element-ui message
-              this.$message.success('Update success')
-              // to login tab
-              setTimeout(() => this.changeTab(0), 1000)
-            })
-            .catch((res) => {
-              // uses element-ui message
-              this.$message.error(res.msg)
-            })
+              .then((res) => {
+                // uses element-ui message
+                this.$message.success('Update success')
+                // to login tab
+                setTimeout(() => this.changeTab(0), 1000)
+              })
+              .catch((res) => {
+                // uses element-ui message
+                this.$message.error(res.msg)
+              })
         }
       }
     }

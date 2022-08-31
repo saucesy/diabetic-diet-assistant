@@ -46,18 +46,18 @@ export function updateProfile(data, headers = {}) {
 }
 
 /**
-<<<<<<< HEAD
  * search user
  * @param {String} email
  * @return {Promise}
  */
 export function searchByEmail(email) {
   return request({url: '/user/search/' + email, method: 'get'})
-=======
+}
+
+/**
  * logout
  * @returns {*}
  */
 export function logout() {
   return request({url: '/user/logout', method: 'get'});
->>>>>>> 886eda0a25e9fac25f44d509945bb86487044fde
 }
