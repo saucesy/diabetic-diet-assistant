@@ -1,17 +1,26 @@
 <template>
   <div class="login">
     <div class="login-bg"></div>
+    <!-- uses bootstrap container -->
     <b-container>
+      <!-- uses bootstrap grid system -->
       <b-row class="justify-content-center align-items-center min-vh-100">
         <b-col lg="6" md="9">
           <b-card no-body class="border-0 shadow-lg my-5 login-card">
+            <!-- uses vue transition-group -->
             <TransitionGroup name="fade-move" mode="out-in" tag="div">
               <!-- login -->
+<<<<<<< HEAD
               <div v-show="current === 0" key="login">
+=======
+              <div v-show="current == 0" key="login">
+                <!-- uses bootstrap card -->
+>>>>>>> 886eda0a25e9fac25f44d509945bb86487044fde
                 <b-card-body class="p-5">
                   <h3 class="text-center mb-4 fw-normal">Welcome Back!</h3>
 
                   <!-- form -->
+                  <!-- uses bootstrap form -->
                   <b-form class="py-2">
                     <!-- Username -->
                     <b-input
@@ -73,6 +82,7 @@
                   </b-form>
 
                   <!-- Confirm -->
+                  <!-- uses bootstrap button -->
                   <b-button
                     block
                     variant="primary"
@@ -84,6 +94,7 @@
 
                   <!-- Link -->
                   <div class="text-center mt-3">
+                    <!-- uses bootstrap link -->
                     <b-link
                       class="text-secondary option-link"
                       @click="changeTab(1)"
@@ -95,10 +106,12 @@
 
               <!-- register -->
               <div v-show="current == 1" key="register">
+                <!-- uses bootstrap card -->
                 <b-card-body class="p-5">
                   <h3 class="text-center mb-4 fw-normal">Create an Account!</h3>
 
                   <!-- form -->
+                  <!-- uses bootstrap form -->
                   <b-form class="py-2">
                     <!-- Username -->
                     <b-input
@@ -191,6 +204,7 @@
                   </b-form>
 
                   <!-- Confirm -->
+                  <!-- uses bootstrap button -->
                   <b-button
                     block
                     variant="primary"
@@ -202,6 +216,7 @@
 
                   <!-- Link -->
                   <div class="text-center mt-3">
+                    <!-- uses bootstrap link -->
                     <b-link
                       class="text-secondary option-link"
                       @click="changeTab(0)"
@@ -213,10 +228,12 @@
 
               <!-- profile -->
               <div v-show="current == 2" key="profile">
+                <!-- uses bootstrap card -->
                 <b-card-body class="p-5">
                   <h3 class="text-center mb-4 fw-normal">Complete Profile!</h3>
 
                   <!-- form -->
+                  <!-- uses bootstrap form -->
                   <b-form class="py-2">
                     <!-- Gender -->
                     <b-input
@@ -264,6 +281,7 @@
                   </b-form>
 
                   <!-- Confirm -->
+                  <!-- uses bootstrap button -->
                   <b-button
                     block
                     variant="primary"
@@ -303,6 +321,7 @@ export default {
       // sex options
       sexOptions: sexOptions,
 
+      // current tab
       current: 0,
 
       // login info
@@ -312,6 +331,7 @@ export default {
       remember: false,
       policy: false,
 
+      // update profile
       profile: {
         gender: null,
         height: null,
@@ -332,6 +352,11 @@ export default {
     }
   },
   computed: {
+    /**
+     * verify whether the input content is legal
+     *
+     * @returns {{password: boolean, password2: boolean, email: boolean, username: boolean}}
+     */
     validation() {
       return {
         username: this.username.length >= 4 && this.username.length <= 12,
@@ -342,9 +367,14 @@ export default {
     }
   },
   methods: {
-    // change login or register or profile
+    /**
+     * change tabs
+     *
+     * @param index
+     */
     changeTab(index) {
       this.current = index
+      // reset
       if (index <= 1) {
         this.email = ''
         this.password = ''
@@ -360,24 +390,37 @@ export default {
       }
     },
 
-    // validate
+    /**
+     * do validate
+     *
+     * @param show
+     */
     doValidate(show = true) {
       for (const key in this.showError) {
         this.showError[key] = show
       }
     },
 
+    /**
+     * alert "Please complete the form"
+     */
     alertComplete() {
+      // uses element-ui message
       this.$message.warning('Please complete the form')
     },
 
-    // login
+    /**
+     * do login
+     */
     login() {
+      // validate
       this.doValidate()
 
       if (!this.validation.username || !this.validation.password) {
         this.alertComplete()
-      } else {
+      }
+      // login
+      else {
         store
           .dispatch('login', {
             username: this.username,
@@ -385,14 +428,19 @@ export default {
             remember: this.remember
           })
           .then(() => {
+            // uses element-ui message
             this.$message.success('Login success')
+            // to home
             setTimeout(() => this.$router.push({path: '/'}), 1000);
           })
       }
     },
 
-    // register
+    /**
+     * do register
+     */
     register() {
+      // validate
       this.doValidate()
 
       if (
@@ -403,7 +451,9 @@ export default {
         this.alertComplete()
       } else if (!this.policy) {
         this.$message.warning('Agree to Terms Privacy Policy first')
-      } else {
+      }
+      // register
+      else {
         store
           .dispatch('register', {
             username: this.username,
@@ -412,17 +462,24 @@ export default {
           })
           .then((res) => {
             this.userID = res.data
+            // uses element-ui message
             this.$message.success('Register success')
+            // to profile tab
             setTimeout(() => this.changeTab(2), 1000)
           })
       }
     },
 
-    // update profile
+    /**
+     * update profile
+     */
     updateProfile() {
+      // validate
       if (typeof this.profile.height === 'number' && this.profile.height < 0) {
+        // uses element-ui message
         this.$message.error('Height must be greater than 0')
       } else if (typeof this.profile.weight === 'number' && this.profile.weight < 0) {
+        // uses element-ui message
         this.$message.error('Weight must be greater than 0')
       } else {
         const profile = {}
@@ -432,15 +489,20 @@ export default {
         // no data
         if (Object.keys(profile).length === 0) {
           this.alertComplete()
-        } else {
+        }
+        // update profile
+        else {
           updateProfile(profile, {
             Authorization: this.userID
           })
             .then((res) => {
+              // uses element-ui message
               this.$message.success('Update success')
+              // to login tab
               setTimeout(() => this.changeTab(0), 1000)
             })
             .catch((res) => {
+              // uses element-ui message
               this.$message.error(res.msg)
             })
         }

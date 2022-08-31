@@ -10,7 +10,9 @@ import 'element-ui/lib/theme-chalk/index.css'
 import '@/assets/styles/index.scss'
 import './permission'
 
+// uses element-ui
 Vue.use(ElementUI)
+// uses bootstrap-vue
 Vue.use(BootstrapVue)
 Vue.config.productionTip = false
 

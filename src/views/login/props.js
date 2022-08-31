@@ -1,4 +1,8 @@
-// sex options
+/**
+ * sex options
+ *
+ * @type {[{label: string, value: number},{label: string, value: number},{label: string, value: number}]}
+ */
 export const sexOptions = [
   {
     label: 'Unknown',
