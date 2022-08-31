@@ -15,6 +15,7 @@ import {mapGetters} from 'vuex'
 import {getList} from '@/api/food'
 import {addMeal, getMealByDate, updateMeal} from '@/api/diet'
 import {createDate, createMealModel} from '@/model/meal'
+import {List} from '@/model'
 
 export default {
   name: 'calender',
@@ -24,9 +25,10 @@ export default {
   },
   data() {
     return {
-      meals: [],
-      foods: [],
+      meals: List.Meal,
+      foods: List.Food,
       meal: createMealModel(),
+      othersID: null,
     }
   },
   created() {
@@ -37,9 +39,10 @@ export default {
   },
   methods: {
     init() {
+      this.othersID = this.$route.params.othersID ?? null
       this.meal = createMealModel()
+      getMealByDate(this.othersID || this.token, createDate()).then((res) => this.meals = res.data)
       getList().then((res) => this.foods = res.data.map((food) => (food.amount = food.default_amount, food)))
-      getMealByDate(this.token, createDate()).then((res) => this.meals = res.data)
     },
 
     onPosting(value) {
@@ -51,18 +54,11 @@ export default {
     },
 
     onEdit(value) {
-      Object.keys(this.meal).forEach((key) => {
-        const v = value[key]
-        if (typeof v) {
-          this.meal[key] = JSON.parse(JSON.stringify(v))
-        } else {
-          this.meal[key] = v
-        }
-      })
+      this.meal = createMealModel(value)
     },
 
     onPickerChange(value) {
-      getMealByDate(this.token, createDate(value)).then((res) => this.meals = res.data)
+      getMealByDate(this.othersID || this.token, createDate(value)).then((res) => this.meals = res.data)
     },
   },
 }

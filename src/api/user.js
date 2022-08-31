@@ -44,3 +44,12 @@ export function getProfile(userID) {
 export function updateProfile(data, headers = {}) {
   return request({url: '/user/profile', method: 'put', data, headers});
 }
+
+/**
+ * search user
+ * @param {String} email
+ * @return {Promise}
+ */
+export function searchByEmail(email) {
+  return request({url: '/user/search/' + email, method: 'get'})
+}

@@ -7,7 +7,7 @@
       </div>
       <div class="rating">
         <img :src="ratingList[post.rate]" alt="mood" @click="isShowRating = !isShowRating">
-        <div class="rating-inner" :class="{'show-rating': isShowRating}">
+        <div class="rating-inner" :class="{'show-rating': isShowRating && !isOther}">
           <template v-for="(rate, index) of ratingList">
             <img :src="rate" :alt="rate" v-if="index !== post.rate" @click="post.rate = index; isShowRating = false">
           </template>
@@ -23,9 +23,10 @@
         </template>
       </food-item>
     </div>
-    <div class="calender-post-item__remark">
+    <div class="calender-post-item__remark" v-if="isOther === false">
       <textarea placeholder="You can add comments here" v-model="post.remark"/>
-      <div class="setting el-icon-setting" @click="isShowSetting = !isShowSetting" :class="{'show-setting': isShowSetting}">
+      <div class="setting el-icon-setting" @click="isShowSetting = !isShowSetting"
+           :class="{'show-setting': isShowSetting}">
         <div class="icons">
           <i @click="onSetting(0)" class="btn-position el-icon-position"></i>
           <i @click="onSetting(1)" class="btn-edit el-icon-edit"></i>
@@ -58,15 +59,20 @@ export default {
       return Number(value).toFixed(2)
     },
   },
+  computed: {
+    isOther() {
+      return !!this.$parent.$parent.othersID
+    }
+  },
   methods: {
     onSetting(value) {
-      if(value) {
+      if (value) {
         return this.$emit('edit', this.post)
       }
-      const { id, remark, rate } = this.post
-      this.$emit('feedback', { id, remark, rate })
+      const {id, remark, rate} = this.post
+      this.$emit('feedback', {id, remark, rate})
     },
-  }
+  },
 }
 </script>
 
@@ -142,7 +148,6 @@ export default {
     textarea {
       width: 100%;
       padding: 10px 15px;
-      height: auto;
       border: none;
       outline: none;
       color: #666;
@@ -182,6 +187,7 @@ export default {
           line-height: 30px;
           text-align: center;
           transition: all .3s;
+
           &:hover {
             opacity: .8;
           }

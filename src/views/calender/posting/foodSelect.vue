@@ -17,14 +17,10 @@
 </template>
 
 <script>
-
 export default {
   name: 'calenderPostingFoodSelect',
   props: {
-    foodList: {
-      type: Array,
-      required: true,
-    },
+    foodList: Array,
   },
   data() {
     return {

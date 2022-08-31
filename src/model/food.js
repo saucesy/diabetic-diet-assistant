@@ -1,6 +1,5 @@
 export default class Food {
   /**
-   *
    * @param {Number} gi
    * @param {Number} id
    * @param {String} name
@@ -30,6 +29,7 @@ export default class Food {
       this.default_amount = default_amount
   }
 }
+
 
 /**
  *

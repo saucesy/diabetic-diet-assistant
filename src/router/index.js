@@ -21,7 +21,7 @@ const routes = [
     component: Layout,
     children: [
       {
-        path: '',
+        path: ':othersID?',
         name: 'Calender',
         component: () => import('@/views/calender'),
         meta: { title: 'Calender', icon: 'calender' }

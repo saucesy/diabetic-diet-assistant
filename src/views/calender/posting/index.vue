@@ -28,6 +28,7 @@
               style="font-size: 20px"
               type="primary"
               :circle="true"
+              v-if="!isOther"
               @click="isPost = true"
           />
         </div>
@@ -60,14 +61,14 @@
 import Card from '@/views/calender/posting/card'
 import foodItem from '@/views/calender/child/FoodItem'
 import FoodSelect from '@/views/calender/posting/foodSelect'
+import {Meal} from '@/model'
 
-import {createListOfFoodModel, Meal} from '@/model'
 
 export default {
   name: 'CalenderPosting',
   props: {
     meal: Meal,
-    foodList: createListOfFoodModel(),
+    foodList: Array,
   },
   components: {
     CalenderPostingCard: Card,
@@ -90,6 +91,11 @@ export default {
       },
     },
   },
+  computed: {
+    isOther() {
+      return this.$parent.othersID
+    }
+  },
   methods: {
     async onPosting() {
       let meal = this.processMeal(this.meal)
@@ -101,11 +107,6 @@ export default {
         this.$emit('update', meal)
       }
       this.isPost = false
-    },
-
-    onAmountInput(event, food) {
-      food.amount = event.target.innerText
-      window.getSelection().setPosition(event.target, 1)
     },
 
     onFoodSelectChange(food) {

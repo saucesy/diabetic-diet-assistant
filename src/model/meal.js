@@ -1,4 +1,4 @@
-import {createListOfFoodModel} from '@/model/food'
+import {List} from '@/model/index'
 
 const _date = new Date()
 
@@ -50,9 +50,8 @@ const createName = () => {
   }
 }
 
-export class Meal {
+export default class Meal {
   /**
-   *
    * @param {Number} id
    * @param {String | Date} date
    * @param {string} time
@@ -61,11 +60,11 @@ export class Meal {
    * @param {Food[]} food
    */
   constructor(
-    id = -1,
-    date = createDate(),
-    name = createName(),
-    time = createTime(),
-    food = createListOfFoodModel(),
+    id,
+    date,
+    name,
+    time,
+    food,
     carbohydrate = 0,
   ) {
     this.id = id
@@ -78,6 +77,18 @@ export class Meal {
 }
 
 /**
+ * @param {Object<String, any>} json
  * @return {Meal}
  */
-export const createMealModel = () => new Meal()
+export const createMealModel =
+  (json =
+     {
+       id: -1,
+       date: createDate(),
+       name: createName(),
+       time: createTime(),
+       food: List.Food,
+       carbohydrate: 0,
+     }) => {
+    return new Meal(json.id, json.date, json.name, json.time, json.food, json.carbohydrate)
+  }

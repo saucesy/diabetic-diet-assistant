@@ -1,7 +1,7 @@
 <template>
   <div class="calender-post">
     <div class="calender-post__head">
-      <div class="title"> Calender</div>
+      <div class="title"> Calender </div>
       <date-picker mode="date" style="width: 200px" @change="onPickerChange"/>
     </div>
     <div class="calender-post__content">

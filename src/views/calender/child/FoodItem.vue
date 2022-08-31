@@ -1,5 +1,5 @@
 <template>
-  <div class="food-item" :class="{'mid': isMidGI(gi), 'high': isHighGi(gi)}">
+  <div class="food-item" :class="{'mid': isMidGI(food.gi), 'high': isHighGi(food.gi)}">
     <div class="food-item__label">
       <div class="food-item__image">
         <img :src="food.image" :alt="food.name">
@@ -15,18 +15,12 @@
 </template>
 
 <script>
+import Food from '@/model/food'
+
 export default {
   name: "FoodItem",
   props: {
-    food: {
-      type: Object,
-      required: true
-    }
-  },
-  computed: {
-    gi() {
-      return this.food.food_data ? this.food.food_data.gi : this.food.gi
-    },
+    food: Food
   },
   methods: {
     isMidGI(gi) {

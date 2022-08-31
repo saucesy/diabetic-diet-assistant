@@ -7,7 +7,7 @@
           <b-card no-body class="border-0 shadow-lg my-5 login-card">
             <TransitionGroup name="fade-move" mode="out-in" tag="div">
               <!-- login -->
-              <div v-show="current == 0" key="login">
+              <div v-show="current === 0" key="login">
                 <b-card-body class="p-5">
                   <h3 class="text-center mb-4 fw-normal">Welcome Back!</h3>
 
