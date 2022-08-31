@@ -1,6 +1,6 @@
 <template>
   <div class="calender-posting"
-       :class="{'shade': isPost, 'display': isOther}"
+       :class="{'shade': isPost, 'display-other': isOther}"
        @click.self="isPost = false">
     <calender-posting-card :time="meal.time" :title="meal.name">
       <template slot="default">
@@ -140,7 +140,7 @@ export default {
   background-color: #fff;
   overflow: hidden;
 
-  &.display {
+  &.display-other {
     @media (max-width: 768px) {
       display: none;
     }

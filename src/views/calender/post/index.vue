@@ -1,5 +1,5 @@
 <template>
-  <div class="calender-post">
+  <div class="calender-post" :class="{'display': !isOther}">
     <div class="calender-post__head">
       <div class="title"> Calender </div>
       <date-picker mode="date" style="width: 200px" @change="onPickerChange"/>
@@ -42,6 +42,11 @@ export default {
       ratingList,
     }
   },
+  computed: {
+    isOther() {
+      return this.$parent.othersID
+    }
+  },
   methods: {
     onPickerChange(value) {
       this.$emit('change', value)
@@ -59,6 +64,12 @@ export default {
   flex: 1;
   display: flex;
   flex-direction: column;
+
+  &.display {
+    @media (max-width: 768px) {
+      display: none;
+    }
+  }
 
   &__head {
     position: sticky;
