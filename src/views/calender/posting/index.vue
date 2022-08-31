@@ -4,23 +4,16 @@
       <template slot="default">
         <template v-for="(food, index) of meal.food">
           <calender-posting-food-item :food="food" :key="index">
-            <div class="operation" style="cursor:pointer;">
-              <el-popover
-                  width="200"
-                  trigger="hover"
-                  placement="top-start">
-                <div slot="default">
-                  <el-input v-model="food.amount" size="mini">
-                    <template slot="append">
-                      <span>{{ food.unit }}</span>
-                    </template>
-                  </el-input>
-                </div>
-                <el-link :underline="false" slot="reference" style="margin-right: 20px">
-                  {{ food.amount || food.default_amount }}{{ food.unit }}
-                </el-link>
-              </el-popover>
-              <i class="el-icon-close" @click="onRemoveFoodFromSelectedFoodList"/>
+            <div class="operation" style="cursor:pointer;display: flex;align-items: center;">
+              <div class="carbs-input" style="margin-right: 10px;margin-bottom: 3px;">
+                <span>{{ (food.carbohydrate * food.amount).toFixed(2) }}carbs/ </span>
+                <el-input style="width: 130px" size="mini" v-model="food.amount" :maxlength="5">
+                  <template slot="append">
+                    <span>{{ food.unit }}</span>
+                  </template>
+                </el-input>
+              </div>
+              <i class="el-icon-close" style="font-size: 18px" @click="onRemoveFoodFromSelectedFoodList"/>
             </div>
           </calender-posting-food-item>
         </template>
@@ -28,7 +21,7 @@
       </template>
       <template slot="footer">
         <div style="display: flex; align-items: center; justify-content: space-between">
-          <span>{{ meal.carbohydrate }} <i style="color: #999"> carbs </i></span>
+          <span>{{ meal.carbohydrate.toFixed(2) }} <i style="color: #999"> carbs </i></span>
           <el-button
               icon="el-icon-s-promotion"
               size="medium"
@@ -91,7 +84,7 @@ export default {
       deep: true,
       handler() {
         this.meal.carbohydrate = this.meal.food.reduce((p, el) => {
-          p += (el.amount || el.default_amount) * el.carbohydrate
+          p += el.amount * el.carbohydrate
           return p
         }, 0)
       },
@@ -110,6 +103,11 @@ export default {
       this.isPost = false
     },
 
+    onAmountInput(event, food) {
+      food.amount = event.target.innerText
+      window.getSelection().setPosition(event.target, 1)
+    },
+
     onFoodSelectChange(food) {
       this.meal.food.push(food)
     },
@@ -120,9 +118,9 @@ export default {
 
     processMeal(meal) {
       meal = JSON.parse(JSON.stringify(this.meal))
-      meal.food = meal.food.map(el => ({id: el.id, amount: Number(el.amount || el.default_amount)}))
+      meal.food = meal.food.map(el => ({id: el.id, amount: Number(el.amount)}))
       return meal
-    },
+    }
   },
 }
 </script>
@@ -146,7 +144,7 @@ export default {
     bottom: 0;
     left: 0;
     z-index: 15;
-    background-color: rgba(0, 0, 0, .2);
+    background-color: rgba(236, 240, 243, .2);
   }
 
   @media (max-width: 768px) {

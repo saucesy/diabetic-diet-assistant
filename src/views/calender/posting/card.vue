@@ -79,7 +79,6 @@ export default {
 
   &__ft {
     padding: 10px 15px;
-    text-align: right;
   }
 }
 </style>

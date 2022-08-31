@@ -33,29 +33,21 @@ export default {
     this.init()
   },
   computed: {
-    title() {
-      return this.$route.meta['title']
-    },
     ...mapGetters(['token']),
-  },
-  filters: {
-    toFixed(num) {
-      return Number(num).toFixed(2)
-    },
   },
   methods: {
     init() {
-      getList().then((res) => this.foods = res.data)
+      this.meal = createMealModel()
+      getList().then((res) => this.foods = res.data.map((food) => (food.amount = food.default_amount, food)))
       getMealByDate(this.token, createDate()).then((res) => this.meals = res.data)
     },
 
-    // posting
     onPosting(value) {
-      addMeal(value).then(() => this.$notify.success('added!'))
+      addMeal(value).then(() => this.$notify.success('added!') && this.init())
     },
 
     onUpdate(value) {
-      updateMeal(value).then(() => this.$notify.success('updated!'))
+      updateMeal(value).then(() => this.$notify.success('updated!') && this.init())
     },
 
     onEdit(value) {

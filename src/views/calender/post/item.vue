@@ -17,9 +17,9 @@
     <div class="calender-post-item__content">
       <food-item v-for="({amount, ...food}) of post.food" :food="food" :key="post.id">
         <template #default="{food}">
-          <span class="gi">gi: {{ food.gi }}</span>
-          &nbsp;•&nbsp;
-          <span class="carbs">carbs: {{ (food.carbohydrate * amount) | toFixed }}</span>
+          <span class="gi">{{ food.gi }}gi</span>
+          -
+          <span class="carbs">{{ (food.carbohydrate * amount) | toFixed }}carbs</span>
         </template>
       </food-item>
     </div>

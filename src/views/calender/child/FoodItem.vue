@@ -1,10 +1,12 @@
 <template>
   <div class="food-item" :class="{'mid': isMidGI(gi), 'high': isHighGi(gi)}">
-    <div class="food-item__image">
-      <img :src="food.image" :alt="food.name">
-    </div>
-    <div class="food-item__name">
-      {{ food.name }}
+    <div class="food-item__label">
+      <div class="food-item__image">
+        <img :src="food.image" :alt="food.name">
+      </div>
+      <div class="food-item__name">
+        {{ food.name }}
+      </div>
     </div>
     <div class="food-item__value">
       <slot :food="food"></slot>
@@ -52,6 +54,7 @@ export default {
 $height: 45px;
 
 .food-item {
+  display: flex;
   height: $height;
   line-height: $height;
 
@@ -71,7 +74,7 @@ $height: 45px;
     background-color: $high-gi-bg;
   }
 
-  &.high > &__image {
+  &.high &__image {
     background-color: $high-gi-font;
   }
 
@@ -80,8 +83,13 @@ $height: 45px;
     background-color: $mid-gi-bg;
   }
 
-  &.mid > &__image {
+  &.mid &__image {
     background-color: $mid-gi-font;
+  }
+
+  &__label {
+    flex: 1;
+    display: flex;
   }
 
   &__image,
@@ -97,8 +105,6 @@ $height: 45px;
     border-radius: 50%;
     background-color: $low-gi-font;
 
-    display: flex;
-
     img {
       width: 90%;
       margin: auto;
@@ -106,27 +112,16 @@ $height: 45px;
   }
 
   &__name {
+    flex: 1;
     margin: 0 10px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
   }
 
   &__value {
     display: flex;
     align-items: center;
-    float: right;
-
-    .carbs {
-      margin-right: 10px;
-    }
-  }
-
-  &__menu {
-    margin-left: 10px;
-    font-size: 18px;
-    cursor: pointer;
-  }
-
-  &__input {
-    width: 150px;
   }
 }
 </style>
