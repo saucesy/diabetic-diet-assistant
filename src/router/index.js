@@ -3,14 +3,15 @@ import VueRouter from 'vue-router'
 Vue.use(VueRouter)
 
 import Layout from "@/layout"
-import Login from "@/views/login"
 
 const routes = [
+  // /login
   {
     path: '/login',
-    component: Login,
+    component: () => import('@/views/login'),
     hidden: true
   },
+  // /calender
   {
     path: '/',
     redirect: '/calender',
@@ -28,6 +29,7 @@ const routes = [
       }
     ]
   },
+  // /charts/:othersID?
   {
     path: '/charts',
     component: Layout,
@@ -40,6 +42,7 @@ const routes = [
       }
     ]
   },
+  // /relations
   {
     path: '/relations',
     component: Layout,
@@ -52,6 +55,7 @@ const routes = [
       }
     ]
   },
+  // /profile/:othersID?
   {
     path: '/profile',
     component: Layout,

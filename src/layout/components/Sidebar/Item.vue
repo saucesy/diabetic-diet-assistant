@@ -2,11 +2,11 @@
   <div :class="{ 'item': true, 'active': isActive }" @click="navigateTo">
     <div class="item-icon">
       <img class="icon" :src="iconPath" :alt="title">
-      <span v-if="showNotification"
+      <!--<span v-if="showNotification"
             class="badge badge-info">
-        {{ $store.profile.notification }}
         {{ $store.getters.profile.notification }}
-      </span>
+      </span>-->
+      <span v-if="showNotification" class="notification"></span>
     </div>
     <span>{{ title }}</span>
   </div>
@@ -34,11 +34,9 @@ export default {
     iconPath() {
       return require(`@/assets/images/${this.icon}${this.isActive ? '-active' : ''}.png`)
     },
+    // is show notification
     showNotification() {
-      return this.data.children[0].meta?.notification && this.$store?.profile?.notification
-    },
-    isNotify() {
-      return this.$store.getters.profile?.notification
+      return this.data.children[0].meta?.notification && this.$store.getters.profile?.notification
     }
   },
   methods: {
@@ -55,10 +53,15 @@ export default {
 .item-icon {
   position: relative;
 
-  .badge {
+  .notification {
     position: absolute;
-    top: -.65rem;
-    right: -1rem;
+    top: -.15rem;
+    right: -.5rem;
+    display: inline-block;
+    background-color: #ff937b;
+    width: 6px;
+    height: 6px;
+    border-radius: 6px;
   }
 }
 </style>

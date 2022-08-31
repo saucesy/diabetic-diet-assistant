@@ -167,7 +167,7 @@ export default {
       }
 
       span {
-        color: #dbdbdb;
+        color: #e7e7e7;
         font-size: 12px;
       }
 
@@ -182,6 +182,11 @@ export default {
   .main-container {
     margin-left: $sideBarWidth;
     padding: 15px;
+  }
+
+  .sidebar-logo-container-outer {
+    display: block;
+    margin: 0 auto;
   }
 }
 

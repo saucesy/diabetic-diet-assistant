@@ -15,7 +15,7 @@
       </div>
     </div>
     <div class="calender-post-item__content">
-      <food-item v-for="({amount, ...food}) of post.food" :food="food" :key="post.id">
+      <food-item v-for="({amount, ...food}, index) in post.food" :food="food" :key="`${post.id}${index}`">
         <template #default="{food}">
           <span class="gi">{{ food.gi }}gi</span>
           -

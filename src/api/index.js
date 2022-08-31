@@ -2,6 +2,8 @@ import axios from 'axios'
 import store from "@/store";
 import {getToken} from "@/utils/auth";
 
+// uses axios
+// axios service
 const service = axios.create({
   baseURL: process.env["VUE_APP_BASE_URL"],
   timeout: 8000,
@@ -11,6 +13,7 @@ const service = axios.create({
 })
 
 service.interceptors.request.use((config) => {
+  // add Authorization to headers
   if(store.getters.token) {
     config.headers['Authorization'] = getToken()
   }
@@ -20,6 +23,7 @@ service.interceptors.request.use((config) => {
 })
 
 service.interceptors.response.use((response) => {
+  // reject when occurs error
   if (response.data.code === 200) return response.data
   return Promise.reject(response.data)
 }, (error) => {

@@ -11,6 +11,6 @@ export default {
     state.profile = payload
   },
   RESET_STATE(state, payload) {
-    Object.assign(state, {profile: '', token: getToken()})
+    Object.assign(state, {profile: null, token: getToken()})
   }
 }
