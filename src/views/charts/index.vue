@@ -70,32 +70,38 @@
     <div class="charts-card bottom">
       <div class="bottom-header">
         <h3>Chart for {{ options[current].label }}</h3>
+        <!-- uses bootstrap button -->
         <b-button size="sm" variant="primary" @click="exportExcel">Export</b-button>
       </div>
       <div class="bottom-chart" ref="chart"></div>
     </div>
 
-    <!-- date modal -->
+    <!-- date ranger select modal -->
+    <!-- uses bootstrap modal -->
     <b-modal id="modal" title="Select Date">
       <div>
+        <!-- uses bootstrap datepicker -->
         <label for="datepicker-1">Select start time</label>
         <b-form-datepicker id="datepicker-1" class="mb-2" v-model="timeFrom"></b-form-datepicker>
         <label for="datepicker-2">Select end time</label>
         <b-form-datepicker id="datepicker-2" v-model="timeTo"></b-form-datepicker>
       </div>
 
+      <!-- uses bootstrap button -->
       <template v-slot:modal-footer>
         <b-button @click="closeModal">Cancel</b-button>
         <b-button variant="primary" @click="selectDate">OK</b-button>
       </template>
     </b-modal>
 
+    <!-- uses element-ui backtop -->
     <el-backtop></el-backtop>
   </div>
 </template>
 
 <script>
 import {getList, getCustomList} from '@/api/analyse';
+import {tabOptions, faces} from '@/views/charts/props';
 // import echarts
 import * as echarts from 'echarts/core';
 import {
@@ -131,39 +137,20 @@ export default {
   name: 'Charts',
   data() {
     return {
-      // data
+      // data list
       dataList: [],
+      // show others data
       othersID: null,
 
-      // time
+      // showing data request params
       showingParams: {},
+      // choose date range
       timeFrom: null,
       timeTo: null,
 
-      // options
+      // tabs
       current: 0,
-      options: [
-        {
-          label: 'Recent 7 days',
-          days: 7
-        },
-        {
-          label: 'Recent 14 days',
-          days: 14
-        },
-        {
-          label: 'Recent 1 month',
-          days: 30
-        },
-        {
-          label: 'Recent 3 months',
-          days: 90
-        },
-        {
-          label: 'Custom',
-          days: 0
-        }
-      ],
+      options: tabOptions,
 
       // show data
       display: {
@@ -174,28 +161,7 @@ export default {
       defaultDisplay: null,
 
       // faces
-      faces: {
-        '4': {
-          url: require('@/assets/images/face-4.svg'),
-          text: 'great'
-        },
-        '3': {
-          url: require('@/assets/images/face-3.svg'),
-          text: 'good'
-        },
-        '2': {
-          url: require('@/assets/images/face-2.svg'),
-          text: 'normal'
-        },
-        '1': {
-          url: require('@/assets/images/face-1.svg'),
-          text: 'worse'
-        },
-        '0': {
-          url: require('@/assets/images/face-0.svg'),
-          text: 'unknown'
-        }
-      },
+      faces: faces,
 
       // echart
       mChart: null
@@ -237,24 +203,27 @@ export default {
       if (days !== 0) request = getList(userID, days);
       // get by date range
       else if (date_from && date_to) request = getCustomList(userID, date_from, date_to);
-      request.then(res => {
-        this.dataList = res.data;
+      request
+          .then(res => {
+            this.dataList = res.data;
 
-        // process charts data
-        const date = [];
-        const carbohydrate = [];
-        const average_rate = [];
-        for (let i = this.dataList.length - 1; i >= 0; i--) {
-          const item = this.dataList[i];
-          date.push(item.date);
-          carbohydrate.push(item.carbohydrate.toFixed(2));
-          average_rate.push(item.average_rate.toFixed(2));
-        }
-        this.$nextTick(() => {
-          this.initChart(date, carbohydrate, average_rate);
-        });
+            // process charts data
+            const date = [];
+            const carbohydrate = [];
+            const average_rate = [];
+            for (let i = this.dataList.length - 1; i >= 0; i--) {
+              const item = this.dataList[i];
+              date.push(item.date);
+              carbohydrate.push(item.carbohydrate.toFixed(2));
+              average_rate.push(item.average_rate.toFixed(2));
+            }
+            this.$nextTick(() => {
+              this.initChart(date, carbohydrate, average_rate);
+            });
 
-      }).catch(res => this.$message.error(res.msg));
+          })
+          // uses element-ui message
+          .catch(res => this.$message.error(res.msg));
     },
 
     /**
@@ -278,16 +247,19 @@ export default {
     selectDate() {
       console.log(+new Date(this.timeFrom), +new Date(this.timeTo), +new Date());
       if (this.timeFrom === null || this.timeTo === null) {
+        // uses element-ui message
         this.$message.error('Please select date!');
         return;
       }
       const today = new Date();
       today.setDate(today.getDate() + 1);
       if (+new Date(this.timeTo) > +today) {
+        // uses element-ui message
         this.$message.error('End time cannot be greater than today!');
         return;
       }
       if (+new Date(this.timeFrom) >= +new Date(this.timeTo)) {
+        // uses element-ui message
         this.$message.error('Start time needs to be less than end time!');
         return;
       }
@@ -320,6 +292,7 @@ export default {
         str = `${this.showingParams.from}/${this.showingParams.to}`;
       }
 
+      // open url
       window.open(`${process.env['VUE_APP_BASE_URL']}/analyse/export/${this.showingParams.user}/${str}/${+new Date()}`);
     },
 
@@ -345,6 +318,7 @@ export default {
       else if (carbohydrate.length < 35) dataZoomEnd = 40;
       else dataZoomEnd = 20;
 
+      // uses echarts
       let myChart = echarts.init(this.$refs.chart);
       let option = {
         tooltip: {
@@ -438,9 +412,11 @@ export default {
      * close modal
      */
     closeModal() {
+      // uses bootstrap modal
       this.$bvModal.hide('modal');
     },
     showModal() {
+      // uses bootstrap modal
       this.$bvModal.show('modal');
     }
   }

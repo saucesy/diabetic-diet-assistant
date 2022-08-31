@@ -5,11 +5,11 @@
         <template v-for="(food, index) of meal.food">
           <calender-posting-food-item :food="food" :key="index">
             <div class="operation" style="cursor:pointer;display: flex;align-items: center;">
-              <div class="carbs-input" style="margin-right: 10px;margin-bottom: 3px;">
-                <span>{{ (food.carbohydrate * food.amount).toFixed(2) }}carbs/ </span>
-                <el-input style="width: 130px" size="mini" v-model="food.amount" :maxlength="5">
+              <div class="carbs-input" style="margin-right: 10px;text-align: right;">
+                <span style="padding: 6px 0">{{ (food.carbohydrate * food.amount).toFixed(2) }}carbs/ </span>
+                <el-input style="width: 130px; padding: 6px 0" size="mini" v-model="food.amount" :maxlength="5">
                   <template slot="append">
-                    <span>{{ food.unit }}</span>
+                    <span v-if="food.unit">{{ food.unit }}</span>
                   </template>
                 </el-input>
               </div>
@@ -151,6 +151,10 @@ export default {
     width: 100%;
     height: calc(100vh - 60px);
     margin-right: 0;
+  }
+
+  .carbs-input {
+    line-height: 32px;
   }
 }
 

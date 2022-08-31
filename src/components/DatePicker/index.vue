@@ -24,6 +24,12 @@ export default {
   },
 
   methods: {
+    /**
+     * get date
+     *
+     * @param value
+     * @returns {string}
+     */
     getDate(value = 0) {
       let date = new Date(this.date)
       date = this.date = new Date(date.setDate(date.getDate() + value))
@@ -33,6 +39,11 @@ export default {
       return `${d < 10 ? '0' + d : d} / ${m < 10 ? '0' + m : m} / ${y}`
     },
 
+    /**
+     * on picker change
+     *
+     * @param type
+     */
     onPickerChange(type) {
       this.value = this.getDate(type === 'pre' ? -1 : 1)
       this.$emit('change', this.date)

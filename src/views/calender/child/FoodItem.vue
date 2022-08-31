@@ -55,7 +55,8 @@ $height: 45px;
 
 .food-item {
   display: flex;
-  height: $height;
+  align-items: center;
+  min-height: $height;
   line-height: $height;
 
   padding: 0 20px;
