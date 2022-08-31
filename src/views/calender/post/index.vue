@@ -60,10 +60,6 @@ export default {
   display: flex;
   flex-direction: column;
 
-  @media (max-width: 768px) {
-    display: none;
-  }
-
   &__head {
     position: sticky;
     top: 15px;

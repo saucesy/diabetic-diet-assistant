@@ -2,10 +2,6 @@
   <div :class="{ 'item': true, 'active': isActive }" @click="navigateTo">
     <div class="item-icon">
       <img class="icon" :src="iconPath" :alt="title">
-      <!--<span v-if="showNotification"
-            class="badge badge-info">
-        {{ $store.getters.profile.notification }}
-      </span>-->
       <span v-if="showNotification" class="notification"></span>
     </div>
     <span>{{ title }}</span>

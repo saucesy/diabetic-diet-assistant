@@ -9,6 +9,8 @@ import 'bootstrap-vue/dist/bootstrap-vue.css'
 import 'element-ui/lib/theme-chalk/index.css'
 import '@/assets/styles/index.scss'
 import './permission'
+import token from '@/mixins/token'
+Vue.mixin(token)
 
 // uses element-ui
 Vue.use(ElementUI)

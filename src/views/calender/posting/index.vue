@@ -1,5 +1,7 @@
 <template>
-  <div class="calender-posting" :class="{'shade': isPost}" @click.self="isPost = false">
+  <div class="calender-posting"
+       :class="{'shade': isPost, 'display': isOther}"
+       @click.self="isPost = false">
     <calender-posting-card :time="meal.time" :title="meal.name">
       <template slot="default">
         <template v-for="(food, index) of meal.food">
@@ -28,7 +30,7 @@
               style="font-size: 20px"
               type="primary"
               :circle="true"
-              v-if="!isOther"
+              v-if="token && !isOther"
               @click="isPost = true"
           />
         </div>
@@ -62,6 +64,7 @@ import Card from '@/views/calender/posting/card'
 import foodItem from '@/views/calender/child/FoodItem'
 import FoodSelect from '@/views/calender/posting/foodSelect'
 import {Meal} from '@/model'
+import {mapGetters} from 'vuex'
 
 
 export default {
@@ -94,7 +97,7 @@ export default {
   computed: {
     isOther() {
       return this.$parent.othersID
-    }
+    },
   },
   methods: {
     async onPosting() {
@@ -136,6 +139,12 @@ export default {
   margin-right: 15px;
   background-color: #fff;
   overflow: hidden;
+
+  &.display {
+    @media (max-width: 768px) {
+      display: none;
+    }
+  }
 
   &.shade:before {
     content: "";

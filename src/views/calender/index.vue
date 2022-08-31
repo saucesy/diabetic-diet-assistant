@@ -1,9 +1,9 @@
 <template>
   <div class="calender">
     <!--  post  -->
-    <calender-post :post-list="meals" @change="onPickerChange" @edit="onEdit"/>
+    <calender-post :post-list="meals" @change="onPickerChange" @edit="onEdit" v-if="token"/>
     <!--  posting  -->
-    <calender-posting :food-list="foods" :meal="meal" @post="onPosting" @update="onUpdate"/>
+    <calender-posting :food-list="foods" :meal="meal" @post="onPosting" @update="onUpdate" :style="{'width': !token && '100%'}"/>
   </div>
 </template>
 

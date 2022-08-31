@@ -78,7 +78,6 @@ export default {
     right: 0;
     height: 60px;
     padding: 0 20px;
-    z-index: 10;
 
     display: flex;
     align-items: center;
@@ -94,7 +93,6 @@ export default {
 
     .menu {
       position: relative;
-
       .toggle {
         cursor: pointer;
       }
@@ -198,7 +196,7 @@ export default {
   .sidebar-container {
     position: fixed;
     top: 0;
-    z-index: 10;
+    z-index: 100;
     background-color: $themeColor;
   }
 
