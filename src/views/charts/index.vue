@@ -52,12 +52,18 @@
           </tr>
           <template v-for="(item, index) in dataList">
             <tr class="child" :key="item.date">
-              <td>{{ item.date.substring(5) }}</td>
+              <td>
+                {{ new Date(item.date).getDate().toString().padStart(2, '0') }}
+                <div style="width: 6px; height: 1px; background-color: #888; margin: 0 auto"></div>
+                {{ (new Date(item.date).getMonth() + 1).toString().padStart(2, '0') }}
+              </td>
 
               <td class="block" v-for="(diet, index2) in item.diet" :key="index2">
                 <div class="face-item" @click="onCellClick(item, diet)">
                   <b-img class="img" :src="faces[diet.rate].url"></b-img>
-                  <span class="text">{{ diet.carbohydrate }}</span>
+                  <span class="text" :style="{ 'font-size': $store.getters.device === 'mobile' ? '10px' : '' }">
+                    {{ getCarbohydrate(diet.carbohydrate) }}
+                  </span>
                 </div>
               </td>
             </tr>
@@ -82,9 +88,9 @@
       <div>
         <!-- uses bootstrap datepicker -->
         <label for="datepicker-1">Select start time</label>
-        <b-form-datepicker id="datepicker-1" class="mb-2" v-model="timeFrom"></b-form-datepicker>
+        <b-datepicker id="datepicker-1" class="mb-2" locale="en" v-model="timeFrom"></b-datepicker>
         <label for="datepicker-2">Select end time</label>
-        <b-form-datepicker id="datepicker-2" v-model="timeTo"></b-form-datepicker>
+        <b-datepicker id="datepicker-2" locale="en" v-model="timeTo"></b-datepicker>
       </div>
 
       <!-- uses bootstrap button -->
@@ -155,7 +161,7 @@ export default {
       // show data
       display: {
         title: 'Blood glucose evaluation',
-        remark: 'Note: Please add the diet in detail before displaying the data.',
+        remark: 'Note: Please add the diet in detail before displaying the data; Below the rating is the quality of carbohydrates intake.',
         rate: -1
       },
       defaultDisplay: null,
@@ -182,6 +188,18 @@ export default {
     };
   },
   methods: {
+    /**
+     * get carbohydrate value
+     *
+     * @param val
+     * @returns {string}
+     */
+    getCarbohydrate(val) {
+      if (this.$store.getters.device === 'mobile') return val.toString().split('.')[0] + 'g';
+
+      return val.toFixed(1).replace('.0', '') + 'g';
+    },
+
     /**
      * get analyse data
      *
@@ -319,7 +337,9 @@ export default {
       else dataZoomEnd = 20;
 
       // uses echarts
-      let myChart = echarts.init(this.$refs.chart);
+      let myChart = echarts.init(this.$refs.chart, null, {
+        locale: 'EN'
+      });
       let option = {
         tooltip: {
           trigger: 'axis',
@@ -550,13 +570,13 @@ export default {
     th,
     td {
       text-align: center;
-      width: 10.5%;
+      width: 11.5%;
       word-break: break-all;
     }
 
     th:first-child,
     td:first-child {
-      width: 16%;
+      width: 8%;
     }
 
     td.block {
