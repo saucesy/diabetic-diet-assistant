@@ -1,17 +1,19 @@
 <template>
   <div class="calender-post" :class="{'display': !isOther}">
     <div class="calender-post__head">
-      <div class="title"> Calender </div>
-      <date-picker mode="date" style="width: 200px" @change="onPickerChange"/>
+      <div class="title"> Calender</div>
+      <date-picker mode="date" style="width: 200px" @change="$emit('change', $event)"/>
     </div>
     <div class="calender-post__content">
-      <template v-for="post of postList">
+      <template v-for="(post, index) of postList">
         <calender-post-item
             :post="post"
             :rating-list="ratingList"
             :key="post.id"
             @edit="$emit('edit', $event)"
-            @feedback="onFeedBack"/>
+            @delete="onDelete($event, index)"
+            @feedback="onFeedBack"
+        />
       </template>
       <el-empty description="There's no record of this date." v-if="!postList.length"/>
     </div>
@@ -21,7 +23,7 @@
 <script>
 import DatePicker from '@/components/DatePicker'
 import CalenderPostItem from '@/views/calender/post/item'
-import {mealFeedback} from '@/api/diet'
+import {deleteMeal, mealFeedback} from '@/api/diet'
 
 const ratingList = []
 for (let i = 0; i < 5; i++) {
@@ -45,14 +47,14 @@ export default {
   computed: {
     isOther() {
       return this.$parent.othersID
-    }
+    },
   },
   methods: {
-    onPickerChange(value) {
-      this.$emit('change', value)
-    },
     onFeedBack(value) {
-      mealFeedback(value).then(() => this.$notify.success('operation success'))
+      mealFeedback(value).catch(() => this.$notify.error('network anomaly.'))
+    },
+    onDelete(id, index) {
+      deleteMeal(id).then(() => this.postList.splice(index, 1)).catch(() => this.$notify.error('network anomaly.'))
     },
   },
 }

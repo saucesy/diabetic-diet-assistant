@@ -6,16 +6,19 @@
       <template slot="default">
         <template v-for="(food, index) of meal.food">
           <calender-posting-food-item :food="food" :key="index">
-            <div class="operation" style="cursor:pointer;display: flex;align-items: center;">
-              <div class="carbs-input" style="margin-right: 10px;text-align: right;">
-                <span style="padding: 6px 0">{{ (food.carbohydrate * food.amount).toFixed(2) }}carbs/ </span>
-                <el-input style="width: 130px; padding: 6px 0" size="mini" v-model="food.amount" :maxlength="5">
-                  <template slot="append">
-                    <span v-if="food.unit">{{ food.unit }}</span>
-                  </template>
+            <div class="operation" style="padding: 10px 0 0;">
+              <div class="carbs-input" style="display: flex;align-items: center">
+                <span>{{ (food.carbohydrate * food.amount).toFixed(2) }}carbs/ </span>
+                <el-input style="width: 130px;margin-right: 10px;"
+                          size="mini"
+                          v-model="food.amount"
+                          :maxlength="5">
+                  <template slot="append"><span>{{ food.unit }}</span></template>
                 </el-input>
+                <i class="el-icon-close" style="font-size: 18px; cursor:pointer;"
+                   @click="onRemoveFoodFromSelectedFoodList"/>
               </div>
-              <i class="el-icon-close" style="font-size: 18px" @click="onRemoveFoodFromSelectedFoodList"/>
+              <small style="display: block; text-align: right; font-size: 12px; line-height: normal; padding: 5px 0">{{ food.carbohydrate * 100 }}g carbs per 100g {{ food.name }}</small>
             </div>
           </calender-posting-food-item>
         </template>
@@ -23,7 +26,7 @@
       </template>
       <template slot="footer">
         <div style="display: flex; align-items: center; justify-content: space-between">
-          <span>{{ meal.carbohydrate.toFixed(2) }} <i style="color: #999"> carbs </i></span>
+          <span style="color: #999">Total carbs: <i style="color: #333">{{ meal.carbohydrate.toFixed(2) }}</i> g</span>
           <el-button
               icon="el-icon-s-promotion"
               size="medium"
@@ -113,7 +116,7 @@ export default {
     },
 
     onFoodSelectChange(food) {
-      this.meal.food.push(food)
+      this.meal.food.push(JSON.parse(JSON.stringify(food)))
     },
 
     onRemoveFoodFromSelectedFoodList(index) {
@@ -124,7 +127,7 @@ export default {
       meal = JSON.parse(JSON.stringify(this.meal))
       meal.food = meal.food.map(el => ({id: el.id, amount: Number(el.amount)}))
       return meal
-    }
+    },
   },
 }
 </script>
@@ -164,7 +167,7 @@ export default {
   }
 
   .carbs-input {
-    line-height: 32px;
+    line-height: normal;
   }
 }
 

@@ -9,7 +9,7 @@
         <span class="name">{{ food.name }}</span>
         <div class="tag">
           <el-tag size="small" :style="getColorByGi(food.gi)">gi:{{ food.gi }}</el-tag>
-          <el-tag size="small">carbs:{{ food.carbohydrate }}</el-tag>
+          <el-tag size="small">carbs:{{ food.carbohydrate }}g</el-tag>
         </div>
       </div>
     </div>
