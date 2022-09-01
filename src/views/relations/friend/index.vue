@@ -20,15 +20,18 @@
           </div>
           <div class="new-friends" v-else>
             <div class="applicant" v-if="user.relationship['applicant']">
+              <!-- uses element-ui link -->
               <el-link :underline="false" type="info"> Waiting for validation</el-link>
             </div>
             <div class="not-applicant" v-else>
+              <!-- uses element-ui button -->
               <el-button plain size="small" @click="$emit('agree', user.relationship.id)"> Agree</el-button>
               <el-button plain size="small" type="danger" @click="$emit('refuse', user.relationship.id)"> Refuse</el-button>
             </div>
           </div>
         </template>
       </relations-users>
+      <!-- uses element-ui empty -->
       <el-empty v-if="!navList[currentNavKey].length" description="No data."/>
     </div>
   </div>

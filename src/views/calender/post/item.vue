@@ -26,6 +26,7 @@
     <div class="calender-post-item__remark" v-if="isOther === false">
       <textarea placeholder="You can add comments here" v-model="post.remark" @blur="onRemark"/>
       <div class="setting">
+        <!-- uses element-ui button -->
         <el-button circle plain size="mini" type="info" @click="onEdit" icon="el-icon-edit"></el-button>
         <el-button circle plain size="mini" type="primary" @click="onFeedBack" icon="el-icon-position"></el-button>
         <el-button circle plain size="mini" type="danger" @click="onDelete" icon="el-icon-delete"></el-button>
@@ -66,20 +67,34 @@ export default {
       this.$emit('edit', this.post)
     },
 
+    /**
+     * rate
+     *
+     * @param index
+     */
     onRating(index) {
       this.post.rate = index
       this.isShowRating = false
       this.onFeedBack()
     },
 
+    /**
+     * edit remark
+     */
     onRemark() {
       this.onFeedBack()
     },
 
+    /**
+     * delete
+     */
     onDelete() {
       this.$emit('delete', this.post.id)
     },
 
+    /**
+     * feedback
+     */
     onFeedBack() {
       const {id, remark, rate} = this.post
       this.$emit('feedback', {id, remark, rate})

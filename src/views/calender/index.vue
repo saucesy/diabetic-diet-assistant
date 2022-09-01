@@ -53,10 +53,12 @@ export default {
     },
 
     onPosting(value) {
+      // uses element-ui notify
       addMeal(value).then(() => this.$notify.success('added!') && this.init())
     },
 
     onUpdate(value) {
+      // uses element-ui notify
       updateMeal(value).then(() => this.$notify.success('updated!') && this.init())
     },
 

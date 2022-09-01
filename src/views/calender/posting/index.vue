@@ -1,32 +1,36 @@
 <template>
+  <!-- left edit -->
   <div class="calender-posting"
        :class="{'shade': isPost, 'display-other': isOther}"
        @click.self="isPost = false">
     <calender-posting-card :time="meal.time" :title="meal.name">
+      <!-- food list -->
       <template slot="default">
         <template v-for="(food, index) of meal.food">
           <calender-posting-food-item :food="food" :key="index">
-            <div class="operation" style="padding: 10px 0 0;">
-              <div class="carbs-input" style="display: flex;align-items: center">
-                <span>{{ (food.carbohydrate * food.amount).toFixed(2) }}carbs/ </span>
-                <el-input style="width: 130px;margin-right: 10px;"
+            <div class="operation" style="padding: 10px 10px 0 0;">
+              <div class="carbs-input" style="text-align: right">
+                <span>{{ (food.carbohydrate * food.amount).toFixed(2) }}carbs / </span>
+                <!-- uses element-ui input -->
+                <el-input style="width: 130px;"
                           size="mini"
                           v-model="food.amount"
                           :maxlength="5">
                   <template slot="append"><span>{{ food.unit }}</span></template>
                 </el-input>
-                <i class="el-icon-close" style="font-size: 18px; cursor:pointer;"
-                   @click="onRemoveFoodFromSelectedFoodList"/>
               </div>
               <small style="display: block; text-align: right; font-size: 12px; line-height: normal; padding: 5px 0">{{ food.carbohydrate * 100 }}g carbs per 100g {{ food.name }}</small>
             </div>
+            <i class="el-icon-close" style="font-size: 18px; cursor:pointer;" @click="onRemoveFoodFromSelectedFoodList"/>
           </calender-posting-food-item>
         </template>
         <calender-posting-food-select :food-list="foodList" @change="onFoodSelectChange"/>
       </template>
+      <!-- total footer -->
       <template slot="footer">
         <div style="display: flex; align-items: center; justify-content: space-between">
           <span style="color: #999">Total carbs: <i style="color: #333">{{ meal.carbohydrate.toFixed(2) }}</i> g</span>
+          <!-- uses element-ui button -->
           <el-button
               icon="el-icon-s-promotion"
               size="medium"
@@ -40,6 +44,7 @@
       </template>
     </calender-posting-card>
 
+    <!-- post confirm dialog -->
     <div class="confirm-info" :class="{'post': isPost}">
       <div class="header">
         <span>confirm info</span>
@@ -47,13 +52,16 @@
       </div>
       <div class="confirm-info__item time">
         <span>time</span>
+        <!-- uses element-ui input -->
         <el-input size="medium" v-model="meal.time"></el-input>
       </div>
       <div class="confirm-info__item name">
         <span>name</span>
+        <!-- uses element-ui input -->
         <el-input size="medium" v-model="meal.name"></el-input>
       </div>
       <div class="confirm-info__btn">
+        <!-- uses element-ui button -->
         <el-button size="small" type="default" @click="isPost = false">cancel</el-button>
         <el-button size="small" type="danger" plain @click="onPosting">confirm</el-button>
       </div>
@@ -103,6 +111,11 @@ export default {
     },
   },
   methods: {
+    /**
+     * post
+     *
+     * @returns {Promise<void>}
+     */
     async onPosting() {
       let meal = this.processMeal(this.meal)
       if (meal.id === -1) {

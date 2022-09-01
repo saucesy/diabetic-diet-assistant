@@ -42,11 +42,23 @@ export default {
       this.$router.push(value)
     },
 
+    /**
+     * refuse apply
+     *
+     * @param value
+     */
     onRefuse(value) {
+      // uses element-ui notify
       refuse(value).then(() => this.$notify.success('refuse success!') && this.init())
     },
 
+    /**
+     * agree apply
+     *
+     * @param value
+     */
     onAgree(value) {
+      // uses element-ui notify
       agree({id: value}).then(() => this.$notify.success('operation success!') && this.init())
     },
   },

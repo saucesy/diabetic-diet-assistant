@@ -8,6 +8,7 @@
       <div class="option" @click="onSaveFood(food)" v-for="food of foodList" :key="food.id">
         <span class="name">{{ food.name }}</span>
         <div class="tag">
+          <!-- uses element-ui tag -->
           <el-tag size="small" :style="getColorByGi(food.gi)">gi:{{ food.gi }}</el-tag>
           <el-tag size="small">carbs:{{ food.carbohydrate }}g</el-tag>
         </div>

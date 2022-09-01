@@ -23,6 +23,7 @@ export default {
     food: Food
   },
   methods: {
+    // determine the range of GI
     isMidGI(gi) {
       return gi > 55 && gi <= 75
     },

@@ -1,9 +1,11 @@
 <template>
+  <!-- right post -->
   <div class="calender-post" :class="{'display': !isOther}">
     <div class="calender-post__head">
       <div class="title"> Calender</div>
       <date-picker mode="date" style="width: 200px" @change="$emit('change', $event)"/>
     </div>
+    <!-- post list -->
     <div class="calender-post__content">
       <template v-for="(post, index) of postList">
         <calender-post-item
@@ -15,6 +17,7 @@
             @feedback="onFeedBack"
         />
       </template>
+      <!-- uses element-ui empty -->
       <el-empty description="There's no record of this date." v-if="!postList.length"/>
     </div>
   </div>
@@ -50,10 +53,23 @@ export default {
     },
   },
   methods: {
+    /**
+     * feedback diet
+     *
+     * @param value
+     */
     onFeedBack(value) {
+      // uses element-ui notify
       mealFeedback(value).catch(() => this.$notify.error('network anomaly.'))
     },
+    /**
+     * delete dirt
+     *
+     * @param id
+     * @param index
+     */
     onDelete(id, index) {
+      // uses element-ui notify
       deleteMeal(id).then(() => this.postList.splice(index, 1)).catch(() => this.$notify.error('network anomaly.'))
     },
   },
