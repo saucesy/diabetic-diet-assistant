@@ -1,9 +1,20 @@
 <template>
   <div class="calender">
     <!--  post  -->
-    <calender-post :post-list="meals" @change="onPickerChange" @edit="onEdit" v-if="token"/>
+    <calender-post
+        :post-list="meals"
+        @change="onPickerChange"
+        @edit="onEdit"
+        v-if="token"
+    />
     <!--  posting  -->
-    <calender-posting :food-list="foods" :meal="meal" @post="onPosting" @update="onUpdate" :style="{'width': !token && '100%'}"/>
+    <calender-posting
+        :meal="meal"
+        :food-list="foods"
+        @post="onPosting"
+        @update="onUpdate"
+        :style="{'width': !token && '100%'}"
+    />
   </div>
 </template>
 
@@ -11,7 +22,6 @@
 import CalenderPost from '@/views/calender/post'
 import CalenderPosting from '@/views/calender/posting'
 
-import {mapGetters} from 'vuex'
 import {getList} from '@/api/food'
 import {addMeal, getMealByDate, updateMeal} from '@/api/diet'
 import {createDate, createMealModel} from '@/model/meal'
@@ -34,14 +44,11 @@ export default {
   created() {
     this.init()
   },
-  computed: {
-    ...mapGetters(['token']),
-  },
   methods: {
     init() {
       this.othersID = this.$route.params.othersID ?? null
       this.meal = createMealModel()
-      getMealByDate(this.othersID || this.token, createDate()).then((res) => this.meals = res.data)
+      this.onPickerChange()
       getList().then((res) => this.foods = res.data.map((food) => (food.amount = food.default_amount, food)))
     },
 
@@ -57,7 +64,8 @@ export default {
       this.meal = createMealModel(value)
     },
 
-    onPickerChange(value) {
+    onPickerChange(value = new Date()) {
+      if (!this.token) return
       getMealByDate(this.othersID || this.token, createDate(value)).then((res) => this.meals = res.data)
     },
   },

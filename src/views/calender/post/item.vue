@@ -9,7 +9,7 @@
         <img :src="ratingList[post.rate]" alt="mood" @click="isShowRating = !isShowRating">
         <div class="rating-inner" :class="{'show-rating': isShowRating && !isOther}">
           <template v-for="(rate, index) of ratingList">
-            <img :src="rate" :alt="rate" v-if="index !== post.rate" @click="post.rate = index; isShowRating = false">
+            <img :src="rate" :alt="rate" v-if="index !== post.rate" @click="onRating(index)">
           </template>
         </div>
       </div>
@@ -17,20 +17,18 @@
     <div class="calender-post-item__content">
       <food-item v-for="({amount, ...food}, index) in post.food" :food="food" :key="`${post.id}${index}`">
         <template #default="{food}">
-          <span class="gi">{{ food.gi }}gi</span>
-          -
-          <span class="carbs">{{ (food.carbohydrate * amount) | toFixed }}carbs</span>
+          <span class="gi">gi:{{ food.gi }}</span>
+          &nbsp;-&nbsp;
+          <span class="carbs">carbs:{{ (food.carbohydrate * amount) | toFixed }}g</span>
         </template>
       </food-item>
     </div>
     <div class="calender-post-item__remark" v-if="isOther === false">
-      <textarea placeholder="You can add comments here" v-model="post.remark"/>
-      <div class="setting el-icon-setting" @click="isShowSetting = !isShowSetting"
-           :class="{'show-setting': isShowSetting}">
-        <div class="icons">
-          <i @click="onSetting(0)" class="btn-position el-icon-position"></i>
-          <i @click="onSetting(1)" class="btn-edit el-icon-edit"></i>
-        </div>
+      <textarea placeholder="You can add comments here" v-model="post.remark" @blur="onRemark"/>
+      <div class="setting">
+        <el-button circle plain size="mini" type="info" @click="onEdit" icon="el-icon-edit"></el-button>
+        <el-button circle plain size="mini" type="primary" @click="onFeedBack" icon="el-icon-position"></el-button>
+        <el-button circle plain size="mini" type="danger" @click="onDelete" icon="el-icon-delete"></el-button>
       </div>
     </div>
   </div>
@@ -51,7 +49,6 @@ export default {
   data() {
     return {
       isShowRating: false,
-      isShowSetting: false,
     }
   },
   filters: {
@@ -62,13 +59,28 @@ export default {
   computed: {
     isOther() {
       return !!this.$parent.$parent.othersID
-    }
+    },
   },
   methods: {
-    onSetting(value) {
-      if (value) {
-        return this.$emit('edit', this.post)
-      }
+    onEdit() {
+      this.$emit('edit', this.post)
+    },
+
+    onRating(index) {
+      this.post.rate = index
+      this.isShowRating = false
+      this.onFeedBack()
+    },
+
+    onRemark() {
+      this.onFeedBack()
+    },
+
+    onDelete() {
+      this.$emit('delete', this.post.id)
+    },
+
+    onFeedBack() {
       const {id, remark, rate} = this.post
       this.$emit('feedback', {id, remark, rate})
     },
@@ -81,6 +93,7 @@ export default {
 
 .calender-post-item {
   position: relative;
+  margin-top: 15px;
   padding-top: 20px;
   overflow: hidden;
   transition: background-color .3s;
@@ -152,8 +165,8 @@ export default {
       outline: none;
       color: #666;
       font-size: 14px;
-      resize: none;
       background-color: transparent;
+      overflow: hidden;
 
       &::placeholder {
         color: #999;
@@ -161,56 +174,8 @@ export default {
     }
 
     .setting {
-      position: absolute;
-      bottom: 0;
-      right: 0;
-      width: 30px;
-      height: 30px;
-      color: #fff;
-      font-size: 18px;
-      line-height: 30px;
-      text-align: center;
-      border-top-left-radius: 50%;
-      background-color: $themeColor;
-      transition: opacity .3s;
-      cursor: pointer;
-
-      .icons {
-        i {
-          position: absolute;
-          right: 0;
-          bottom: 0;
-          z-index: -1;
-          width: 30px;
-          height: 30px;
-          border-radius: 50%;
-          line-height: 30px;
-          text-align: center;
-          transition: all .3s;
-
-          &:hover {
-            opacity: .8;
-          }
-        }
-      }
-
-      &.show-setting {
-        i {
-          z-index: 1;
-        }
-
-        i.btn-position {
-          right: 10px;
-          bottom: 40px;
-          background-color: #85ce61;
-        }
-
-        i.btn-edit {
-          right: 40px;
-          bottom: 10px;
-          background-color: #909399;
-        }
-      }
+      text-align: right;
+      padding: 0 10px 10px;
     }
   }
 }

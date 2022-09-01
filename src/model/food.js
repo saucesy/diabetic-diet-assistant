@@ -30,13 +30,6 @@ export default class Food {
   }
 }
 
-
-/**
- *
- * @return {Food[]}
- */
-export const createListOfFoodModel = () => []
-
 /**
  *
  * @param {Object<String, any>} json

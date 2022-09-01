@@ -35,3 +35,12 @@ export function mealFeedback(data) {
 export function addMeal(data) {
   return request({url: '/diet', method: 'post', data})
 }
+
+/**
+ *
+ * @param {String | Number} id
+ * @return {Promise}
+ */
+export function deleteMeal(id) {
+  return request({url: `/diet/${id}`, method: 'delete'})
+}
