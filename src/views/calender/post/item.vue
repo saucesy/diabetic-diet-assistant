@@ -8,9 +8,12 @@
       <div class="rating">
         <img :src="ratingList[post.rate]" alt="mood" @click="isShowRating = !isShowRating">
         <div class="rating-inner" :class="{'show-rating': isShowRating && !isOther}">
-          <template v-for="(rate, index) of ratingList">
-            <img :src="rate" :alt="rate" v-if="index !== post.rate" @click="onRating(index)">
-          </template>
+          <span class="text">Blood glucose rating</span>
+          <div class="images">
+            <template v-for="(rate, index) of ratingList">
+              <img :src="rate" :alt="rate" v-if="index !== post.rate" @click="onRating(index)">
+            </template>
+          </div>
         </div>
       </div>
     </div>
@@ -36,35 +39,35 @@
 </template>
 
 <script>
-import FoodItem from '@/views/calender/child/FoodItem'
+import FoodItem from '@/views/calender/child/FoodItem';
 
 export default {
   name: 'calenderPostItem',
   props: {
     post: Object,
-    ratingList: Array,
+    ratingList: Array
   },
   components: {
-    FoodItem,
+    FoodItem
   },
   data() {
     return {
-      isShowRating: false,
-    }
+      isShowRating: false
+    };
   },
   filters: {
     toFixed(value) {
-      return Number(value).toFixed(2)
-    },
+      return Number(value).toFixed(2);
+    }
   },
   computed: {
     isOther() {
-      return !!this.$parent.$parent.othersID
-    },
+      return !!this.$parent.$parent.othersID;
+    }
   },
   methods: {
     onEdit() {
-      this.$emit('edit', this.post)
+      this.$emit('edit', this.post);
     },
 
     /**
@@ -73,34 +76,34 @@ export default {
      * @param index
      */
     onRating(index) {
-      this.post.rate = index
-      this.isShowRating = false
-      this.onFeedBack()
+      this.post.rate = index;
+      this.isShowRating = false;
+      this.onFeedBack();
     },
 
     /**
      * edit remark
      */
     onRemark() {
-      this.onFeedBack()
+      this.onFeedBack();
     },
 
     /**
      * delete
      */
     onDelete() {
-      this.$emit('delete', this.post.id)
+      this.$emit('delete', this.post.id);
     },
 
     /**
      * feedback
      */
     onFeedBack() {
-      const {id, remark, rate} = this.post
-      this.$emit('feedback', {id, remark, rate})
-    },
-  },
-}
+      const {id, remark, rate} = this.post;
+      this.$emit('feedback', {id, remark, rate});
+    }
+  }
+};
 </script>
 
 <style lang="scss">
@@ -148,14 +151,27 @@ export default {
         position: absolute;
         right: 35px;
         bottom: 0;
-        display: flex;
 
         width: 0;
         overflow: hidden;
         transition: all .3s;
+        text-align: right;
+
+        .images {
+          display: flex;
+          justify-content: end;
+        }
+
+        .text {
+          display: inline-block;
+          padding-bottom: 6px;
+          white-space: nowrap;
+          font-size: 15px;
+          padding-right: 8px;
+        }
 
         &.show-rating {
-          width: 140px;
+          width: 200px;
         }
 
         img {
@@ -171,7 +187,7 @@ export default {
   }
 
   &__remark {
-    background-color: #f6f6f6;
+    background-color: #F6F6F6;
 
     textarea {
       width: 100%;

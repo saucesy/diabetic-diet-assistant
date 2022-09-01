@@ -362,6 +362,10 @@ export default {
       }
     }
   },
+  created() {
+    // get tab
+    this.current = parseInt(this.$route.params.tab ?? 0);
+  },
   methods: {
     /**
      * change tabs

@@ -7,9 +7,9 @@ import Layout from "@/layout"
 const routes = [
   // /login
   {
-    path: '/login',
+    path: '/login/:tab?',
     component: () => import('@/views/login'),
-    hidden: true
+    hidden: true,
   },
   // /calender
   {

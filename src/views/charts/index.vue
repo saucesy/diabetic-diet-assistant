@@ -160,7 +160,7 @@ export default {
 
       // show data
       display: {
-        title: 'Blood glucose evaluation',
+        title: 'Blood glucose rating',
         remark: 'Note: Please add the diet in detail before displaying the data; Below the rating is the quality of carbohydrates intake.',
         rate: -1
       },

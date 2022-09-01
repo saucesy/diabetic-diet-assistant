@@ -36,12 +36,15 @@ router.beforeEach(async (to, from, next) => {
     }
   } else {
     // accessible page
-    if (whiteList.indexOf(to.path) !== -1) {
-      next()
-    } else {
-      next(`/login?redirect=${to.path}`)
-      NProgress.done()
+    for (let white of whiteList) {
+      if (to.path.includes(white)) {
+        next()
+        return
+      }
     }
+
+    next(`/login?redirect=${to.path}`)
+    NProgress.done()
   }
 })
 

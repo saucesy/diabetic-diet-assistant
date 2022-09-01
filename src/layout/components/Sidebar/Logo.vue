@@ -22,8 +22,11 @@
 
           <!-- not login -->
           <template v-else>
-            <el-dropdown-item class="clearfix" @click.native="toLogin">
+            <el-dropdown-item class="clearfix" @click.native="toLogin(0)">
               Login
+            </el-dropdown-item>
+            <el-dropdown-item class="clearfix" @click.native="toLogin(1)">
+              Create
             </el-dropdown-item>
           </template>
         </el-dropdown-menu>
@@ -39,7 +42,13 @@
         <span class="name">{{ username }}</span>
 
         <!-- logout -->
-        <icon v-if="isLogin" class="icon" name="logout.svg" @click="logout"/>
+        <!-- <icon v-if="isLogin" class="icon" name="logout.svg" :size="20" @click="logout"/> -->
+        <span v-if="isLogin" class="sign" @click="logout">Logout</span>
+        <!-- <icon v-else class="icon" name="login.svg" :size="20" @click="toLogin"/> -->
+        <template v-else>
+          <span class="sign" @click="toLogin(0)">Login</span>
+          <span class="sign" @click="toLogin(1)">Create</span>
+        </template>
       </div>
     </template>
   </div>
@@ -84,7 +93,7 @@ export default {
      * @returns {*|string}
      */
     username() {
-      return this.$store.getters?.profile?.username ?? 'guest';
+      return this.$store.getters?.profile?.username ?? 'Guest';
     },
     /**
      * isMobile
@@ -116,8 +125,8 @@ export default {
     /**
      * to login
      */
-    toLogin() {
-      this.$router.push('/login');
+    toLogin(tab) {
+      this.$router.push('/login/' + tab);
     },
 
     /**
@@ -157,9 +166,22 @@ export default {
     cursor: default;
 
     .name {
+      text-align: center;
       display: block;
       font-size: 15px;
       margin: 0 auto;
+    }
+
+    .sign {
+      text-align: center;
+      display: inline-block;
+      font-size: 12px;
+      margin: 6px auto 4px;
+      user-select: none;
+      padding: 2px 6px;
+      cursor: pointer;
+      border: 1px solid white;
+      border-radius: 6px;
     }
 
     .icon {
