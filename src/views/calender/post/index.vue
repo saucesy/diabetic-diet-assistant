@@ -24,13 +24,13 @@
 </template>
 
 <script>
-import DatePicker from '@/components/DatePicker'
-import CalenderPostItem from '@/views/calender/post/item'
-import {deleteMeal, mealFeedback} from '@/api/diet'
+import DatePicker from '@/components/DatePicker';
+import CalenderPostItem from '@/views/calender/post/item';
+import {deleteMeal, mealFeedback} from '@/api/diet';
 
-const ratingList = []
+const ratingList = [];
 for (let i = 0; i < 5; i++) {
-  ratingList.push(require(`@/assets/images/face-${i}.svg`))
+  ratingList.push(require(`@/assets/images/face-${i}.svg`));
 }
 
 export default {
@@ -45,11 +45,11 @@ export default {
   data() {
     return {
       ratingList,
-    }
+    };
   },
   computed: {
     isOther() {
-      return this.$parent.othersID
+      return this.$parent.othersID;
     },
   },
   methods: {
@@ -60,7 +60,9 @@ export default {
      */
     onFeedBack(value) {
       // uses element-ui notify
-      mealFeedback(value).catch(() => this.$notify.error('network anomaly.'))
+      mealFeedback(value)
+          .then(() => this.$notify.success('saved successfully.'))
+          .catch(() => this.$notify.error('network anomaly.'));
     },
     /**
      * delete dirt
@@ -70,10 +72,10 @@ export default {
      */
     onDelete(id, index) {
       // uses element-ui notify
-      deleteMeal(id).then(() => this.postList.splice(index, 1)).catch(() => this.$notify.error('network anomaly.'))
+      deleteMeal(id).then(() => this.postList.splice(index, 1)).catch(() => this.$notify.error('network anomaly.'));
     },
   },
-}
+};
 </script>
 
 <style lang="scss">
@@ -98,7 +100,7 @@ export default {
     justify-content: space-between;
     height: 68px;
     padding: 0 15px;
-    background-color: #fff;
+    background-color: #FFFFFF;
     box-shadow: 0 2px 10px rgba(0, 0, 0, .1);
 
     .title {
@@ -108,7 +110,7 @@ export default {
 
   &__content {
     flex: 1;
-    background-color: #fff;
+    background-color: #FFFFFF;
   }
 }
 </style>

@@ -31,7 +31,7 @@
       <div class="setting">
         <!-- uses element-ui button -->
         <el-button circle plain size="mini" type="info" @click="onEdit" icon="el-icon-edit"></el-button>
-        <el-button circle plain size="mini" type="primary" @click="onFeedBack" icon="el-icon-position"></el-button>
+        <!--<el-button circle plain size="mini" type="primary" @click="onFeedBack" icon="el-icon-position"></el-button>-->
         <el-button circle plain size="mini" type="danger" @click="onDelete" icon="el-icon-delete"></el-button>
       </div>
     </div>
