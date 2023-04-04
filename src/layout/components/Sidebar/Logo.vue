@@ -13,20 +13,20 @@
               {{ username }}
             </el-dropdown-item>
             <el-dropdown-item class="clearfix" @click.native="toProfile">
-              Profile
+              {{ $t('functions.profile') }}
             </el-dropdown-item>
             <el-dropdown-item class="clearfix" @click.native="logout">
-              Logout
+              {{ $t('functions.logout') }}
             </el-dropdown-item>
           </template>
 
           <!-- not login -->
           <template v-else>
             <el-dropdown-item class="clearfix" @click.native="toLogin(0)">
-              Login
+              {{ $t('functions.login') }}
             </el-dropdown-item>
             <el-dropdown-item class="clearfix" @click.native="toLogin(1)">
-              Create
+              {{ $t('functions.create') }}
             </el-dropdown-item>
           </template>
         </el-dropdown-menu>
@@ -43,11 +43,11 @@
 
         <!-- logout -->
         <!-- <icon v-if="isLogin" class="icon" name="logout.svg" :size="20" @click="logout"/> -->
-        <span v-if="isLogin" class="sign" @click="logout">Logout</span>
+        <span v-if="isLogin" class="sign" @click="logout">{{ $t('functions.logout') }}</span>
         <!-- <icon v-else class="icon" name="login.svg" :size="20" @click="toLogin"/> -->
         <template v-else>
-          <span class="sign" @click="toLogin(0)">Login</span>
-          <span class="sign" @click="toLogin(1)">Create</span>
+          <span class="sign" @click="toLogin(0)">{{ $t('functions.login') }}</span>
+          <span class="sign" @click="toLogin(1)">{{ $t('functions.create') }}</span>
         </template>
       </div>
     </template>
@@ -58,6 +58,7 @@
 import {logout} from '@/api/user';
 import {removeToken} from '@/utils/auth';
 import Icon from '@/components/Icon';
+import {i18n} from "@/i18n";
 
 export default {
   name: 'Logo',
@@ -136,7 +137,7 @@ export default {
       logout();
       removeToken();
       // uses element-ui message
-      this.$message.success('Logout success');
+      this.$message.success(i18n.t('message.logoutSuccess'));
       setTimeout(() => location.reload(), 2000);
     }
   }
@@ -156,6 +157,7 @@ export default {
     //transform: rotate(-45deg);
     cursor: pointer;
     border-radius: 40px;
+    object-fit: cover;
   }
 
   .username {

@@ -3,6 +3,7 @@ import VueRouter from 'vue-router'
 Vue.use(VueRouter)
 
 import Layout from "@/layout"
+import {i18n} from "@/i18n";
 
 const routes = [
   // /login
@@ -25,7 +26,7 @@ const routes = [
         path: ':othersID?',
         name: 'Calender',
         component: () => import('@/views/calender'),
-        meta: { title: 'Calender', icon: 'calender' }
+        meta: { title: i18n.t('functions.calender'), icon: 'calender' }
       }
     ]
   },
@@ -38,7 +39,7 @@ const routes = [
         path: ':othersID?',
         name: 'Charts',
         component: () => import('@/views/charts'),
-        meta: { title: 'Charts', icon: 'chart' }
+        meta: { title: i18n.t('functions.charts'), icon: 'chart' }
       }
     ]
   },
@@ -51,7 +52,7 @@ const routes = [
         path: '',
         name: 'Relations',
         component: () => import('@/views/relations'),
-        meta: { title: 'Relations',icon: 'relations', notification: true }
+        meta: { title: i18n.t('functions.relations'), icon: 'relations', notification: true }
       }
     ]
   },
@@ -65,7 +66,7 @@ const routes = [
         path: ':othersID?',
         name: 'Profile',
         component: () => import('@/views/profile'),
-        meta: { title: 'Profile',icon: 'relations' }
+        meta: { title: i18n.t('functions.profile'), icon: 'profile' }
       }
     ]
   }

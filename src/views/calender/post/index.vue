@@ -2,7 +2,7 @@
   <!-- right post -->
   <div class="calender-post" :class="{'display': !isOther}">
     <div class="calender-post__head">
-      <div class="title"> Calender</div>
+      <div class="title">{{ $t('functions.calender') }}</div>
       <date-picker mode="date" style="width: 200px" @change="$emit('change', $event)"/>
     </div>
     <!-- post list -->
@@ -27,6 +27,7 @@
 import DatePicker from '@/components/DatePicker';
 import CalenderPostItem from '@/views/calender/post/item';
 import {deleteMeal, mealFeedback} from '@/api/diet';
+import {i18n} from "@/i18n";
 
 const ratingList = [];
 for (let i = 0; i < 5; i++) {
@@ -61,8 +62,8 @@ export default {
     onFeedBack(value) {
       // uses element-ui notify
       mealFeedback(value)
-          .then(() => this.$notify.success('saved successfully.'))
-          .catch(() => this.$notify.error('network anomaly.'));
+          .then(() => this.$notify.success(i18n.t('message.saveSuccess')))
+          .catch(() => this.$notify.error(i18n.t('message.networkAnomaly')));
     },
     /**
      * delete dirt

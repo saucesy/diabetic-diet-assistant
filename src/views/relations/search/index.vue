@@ -2,7 +2,7 @@
   <div class="relations-search">
     <div class="relations-search__header">
       <!-- uses element-ui input -->
-      <el-input prefix-icon="el-icon-search" placeholder="search user" clearable v-model="searchValue" size="small"/>
+      <el-input prefix-icon="el-icon-search" :placeholder="$t('relations.searchUser')" clearable v-model="searchValue" size="small"/>
     </div>
     <div class="relations-search__content">
       <relations-users :users="users">
@@ -15,25 +15,24 @@
             <template v-if="user.relationship.relative">
               <!-- waiting -->
               <div class="applicant" v-if="user.relationship['applicant']">
-                <el-link :underline="false" type="info"> Waiting for validation</el-link>
+                <el-link :underline="false" type="info">{{ $t('relations.waitingFor') }}</el-link>
               </div>
               <!-- options -->
               <div class="not-applicant" v-else>
                 <!-- uses element-ui button -->
-                <el-button plain size="small" @click="$emit('agree', user.relationship.id)"> Agree</el-button>
-                <el-button plain size="small" type="danger" @click="$emit('refuse', user.relationship.id)"> Refuse
-                </el-button>
+                <el-button plain size="small" type="danger" @click="$emit('refuse', user.relationship.id)">{{ $t('relations.refuse') }}</el-button>
+                <el-button plain size="small" @click="$emit('agree', user.relationship.id)">{{ $t('relations.agree') }}</el-button>
               </div>
             </template>
             <template v-else>
               <!-- uses element-ui button -->
-              <el-button plain size="small" @click="onAdd(user)"> add</el-button>
+              <el-button plain size="small" @click="onAdd(user)">{{ $t('relations.add') }}</el-button>
             </template>
           </div>
         </template>
       </relations-users>
       <!-- uses element-ui empty -->
-      <el-empty description="No Data..." v-if="!users.length"/>
+      <el-empty :description="$t('relations.noData')" v-if="!users.length"/>
     </div>
   </div>
 </template>
@@ -42,6 +41,7 @@
 import {searchByEmail} from '@/api/user'
 import RelationsUsers from '@/views/relations/child/users'
 import {addRelation} from '@/api/relationship'
+import {i18n} from "@/i18n";
 
 export default {
   name: 'RelationsSearch',
@@ -71,11 +71,12 @@ export default {
     },
 
     onAdd(user) {
-      addRelation({invitee_id: user.id}).then(() =>
-          // uses element-ui notify
-          this.$notify.success('send success！')
-          && (user.relationship.relative = true, user.relationship['applicant'] = true),
-      )
+      addRelation({invitee_id: user.id}).then(() => {
+        // uses element-ui notify
+        this.$notify.success(i18n.t('message.applySuccess'))
+        user.relationship.relative = true
+        user.relationship['applicant'] = true
+      })
     },
   },
 }

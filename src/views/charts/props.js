@@ -1,3 +1,5 @@
+import {i18n} from "@/i18n";
+
 /**
  * tabOptions
  *
@@ -5,23 +7,23 @@
  */
 export const tabOptions = [
   {
-    label: 'Recent 7 days',
+    label: i18n.t('charts.time.d7'),
     days: 7
   },
   {
-    label: 'Recent 14 days',
+    label: i18n.t('charts.time.d14'),
     days: 14
   },
   {
-    label: 'Recent 1 month',
+    label: i18n.t('charts.time.m1'),
     days: 30
   },
   {
-    label: 'Recent 3 months',
+    label: i18n.t('charts.time.m3'),
     days: 90
   },
   {
-    label: 'Custom',
+    label: i18n.t('charts.time.custom'),
     days: 0
   }
 ];
@@ -35,22 +37,22 @@ export const tabOptions = [
 export const faces = {
   '4': {
     url: require('@/assets/images/face-4.svg'),
-    text: 'great'
+    text: i18n.t('charts.face.great')
   },
   '3': {
     url: require('@/assets/images/face-3.svg'),
-    text: 'good'
+    text: i18n.t('charts.face.good')
   },
   '2': {
     url: require('@/assets/images/face-2.svg'),
-    text: 'normal'
+    text: i18n.t('charts.face.normal')
   },
   '1': {
     url: require('@/assets/images/face-1.svg'),
-    text: 'worse'
+    text: i18n.t('charts.face.worse')
   },
   '0': {
     url: require('@/assets/images/face-0.svg'),
-    text: 'unknown'
+    text: i18n.t('charts.face.unknown')
   }
 };

@@ -22,7 +22,7 @@
           <!-- uses bootstrap grid system -->
           <b-row v-if="item.type === 'radio'" :key="item.key" class="mb-4">
             <b-col sm="3" class="d-inline-flex align-items-center mb-1 mb-md-0">
-              <label :for="`type-${item.key}`"><span class="text-capitalize">{{ item.key }}</span>{{
+              <label :for="`type-${item.key}`"><span class="text-capitalize">{{ item.label }}</span>{{
                   item?.suffix
                 }}</label>
             </b-col>
@@ -41,13 +41,13 @@
           <!-- uses bootstrap grid system -->
           <b-row v-else-if="item.type === 'datepicker'" :key="item.key" class="mb-4">
             <b-col sm="3" class="d-inline-flex align-items-center mb-1 mb-md-0">
-              <label :for="`type-${item.key}`"><span class="text-capitalize">{{ item.key }}</span>{{
+              <label :for="`type-${item.key}`"><span class="text-capitalize">{{ item.label }}</span>{{
                   item?.suffix
                 }}</label>
             </b-col>
             <b-col sm="9">
               <!-- uses bootstrap datepicker -->
-              <b-datepicker :id="`type-${item.key}`" locale="en" v-model="profile[item.key]"
+              <b-datepicker :id="`type-${item.key}`" :locale="$store.getters.locale" v-model="profile[item.key]"
                             :disabled="item.disabled ?? false"></b-datepicker>
             </b-col>
           </b-row>
@@ -56,7 +56,7 @@
           <!-- uses bootstrap grid system -->
           <b-row v-else :key="item.key" class="mb-4">
             <b-col sm="3" class="d-inline-flex align-items-center mb-1 mb-md-0">
-              <label :for="`type-${item.key}`"><span class="text-capitalize">{{ item.key }}</span>{{
+              <label :for="`type-${item.key}`"><span class="text-capitalize">{{ item.label }}</span>{{
                   item?.suffix
                 }}</label>
             </b-col>
@@ -73,13 +73,13 @@
       <!-- update profile -->
       <div class="d-flex justify-content-center align-items-center mt-5" v-if="!othersID">
         <!-- uses bootstrap button -->
-        <b-button variant="primary" pill @click="updateProfile(profile)">Update</b-button>
+        <b-button variant="primary" pill @click="updateProfile(profile)">{{ $t('profile.update') }}</b-button>
       </div>
 
       <!-- update relative's remark -->
       <div class="d-flex justify-content-center align-items-center mt-5" v-else-if="profile.hasOwnProperty('remark')">
         <!-- uses bootstrap button -->
-        <b-button variant="primary" pill @click="updateRemark">Update Remark</b-button>
+        <b-button variant="primary" pill @click="updateRemark">{{ $t('profile.updateRemark') }}</b-button>
       </div>
     </div>
   </div>
@@ -90,6 +90,7 @@ import {getSelfProfile, updateProfile, getProfile} from '@/api/user';
 import {uploadImage} from '@/api/file';
 import {editRemark} from '@/api/relationship';
 import {inputSort} from '@/views/profile/props';
+import {i18n} from "@/i18n";
 
 export default {
   name: 'Profile',
@@ -152,7 +153,7 @@ export default {
       if (profile) {
         updateProfile(profile)
             // uses element-ui message
-            .then(res => this.$message.success('Update Success'))
+            .then(res => this.$message.success(i18n.t('message.updateSuccess')))
             .catch(res => this.$message.error(res.msg));
       }
     },
@@ -173,7 +174,7 @@ export default {
       };
 
       // uses element-ui message
-      editRemark(data).then(res => this.$message.success('Update Success'));
+      editRemark(data).then(res => this.$message.success(i18n.t('message.updateSuccess')));
     },
 
     /**

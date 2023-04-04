@@ -1,4 +1,5 @@
 import {List} from '@/model/index'
+import {i18n} from "@/i18n";
 
 const _date = new Date()
 
@@ -25,11 +26,11 @@ export const createDate = (date = _date) => {
 }
 
 const MealNode = {
-  BEFORE_DAWN: 'Before Dawn',
-  BREAKFAST: 'Breakfast',
-  LUNCH: 'Lunch',
-  SUPPER: 'supper',
-  NIGHT_SNACK: 'Night Snack',
+  BEFORE_DAWN: i18n.t('calender.beforeDawn'),
+  BREAKFAST: i18n.t('calender.breakfast'),
+  LUNCH: i18n.t('calender.lunch'),
+  SUPPER: i18n.t('calender.supper'),
+  NIGHT_SNACK: i18n.t('calender.nightSnack'),
 }
 
 /**

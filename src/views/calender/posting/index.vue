@@ -19,7 +19,16 @@
                   <template slot="append"><span>{{ food.unit }}</span></template>
                 </el-input>
               </div>
-              <small style="display: block; text-align: right; font-size: 12px; line-height: normal; padding: 5px 0">{{ food.carbohydrate * 100 }}g carbs per 100g {{ food.name }}</small>
+              <small style="display: block; text-align: right; font-size: 12px; line-height: normal; padding: 5px 0">
+                {{
+                  $t('calender.carbsPerQuantity', {
+                    carbs: (food.unit === 'g') ? food.carbohydrate * 100 : food.carbohydrate,
+                    name: food.name,
+                    amount: food.default_amount,
+                    unit: food.unit
+                  })
+                }}
+              </small>
             </div>
             <i class="el-icon-close" style="font-size: 18px; cursor:pointer;" @click="onRemoveFoodFromSelectedFoodList"/>
           </calender-posting-food-item>
@@ -29,7 +38,7 @@
       <!-- total footer -->
       <template slot="footer">
         <div style="display: flex; align-items: center; justify-content: space-between">
-          <span style="color: #999">Total carbs: <i style="color: #333">{{ meal.carbohydrate.toFixed(2) }}</i> g</span>
+          <span style="color: #999">{{ $t('calender.totalCarbs') }}<i style="color: #333">{{ meal.carbohydrate.toFixed(2) }}</i> g</span>
           <!-- uses element-ui button -->
           <el-button
               icon="el-icon-s-promotion"
@@ -47,23 +56,23 @@
     <!-- post confirm dialog -->
     <div class="confirm-info" :class="{'post': isPost}">
       <div class="header">
-        <span>confirm info</span>
+        <span>{{ $t('calender.publish.title') }}</span>
         <i class="el-icon-close" @click="isPost = false"/>
       </div>
       <div class="confirm-info__item time">
-        <span>time</span>
+        <span>{{ $t('calender.publish.time') }}</span>
         <!-- uses element-ui input -->
         <el-input size="medium" v-model="meal.time"></el-input>
       </div>
       <div class="confirm-info__item name">
-        <span>name</span>
+        <span>{{ $t('calender.publish.name') }}</span>
         <!-- uses element-ui input -->
         <el-input size="medium" v-model="meal.name"></el-input>
       </div>
       <div class="confirm-info__btn">
         <!-- uses element-ui button -->
-        <el-button size="small" type="default" @click="isPost = false">cancel</el-button>
-        <el-button size="small" type="danger" plain @click="onPosting">confirm</el-button>
+        <el-button size="small" type="default" @click="isPost = false">{{ $t('calender.publish.cancel') }}</el-button>
+        <el-button size="small" type="danger" plain @click="onPosting">{{ $t('calender.publish.confirm') }}</el-button>
       </div>
     </div>
   </div>

@@ -8,7 +8,7 @@
       <div class="rating">
         <img :src="ratingList[post.rate]" alt="mood" @click="isShowRating = !isShowRating">
         <div class="rating-inner" :class="{'show-rating': isShowRating && !isOther}">
-          <span class="text">Blood glucose rating</span>
+          <span class="text">{{ $t('calender.rating') }}</span>
           <div class="images">
             <template v-for="(rate, index) of ratingList">
               <img :src="rate" :alt="rate" v-if="index !== post.rate" @click="onRating(index)">
@@ -27,7 +27,7 @@
       </food-item>
     </div>
     <div class="calender-post-item__remark" v-if="isOther === false">
-      <textarea placeholder="You can add comments here" v-model="post.remark" @blur="onRemark"/>
+      <textarea :placeholder="$t('calender.canAddRemark')" v-model="post.remark" @blur="onRemark"/>
       <div class="setting">
         <!-- uses element-ui button -->
         <el-button circle plain size="mini" type="info" @click="onEdit" icon="el-icon-edit"></el-button>

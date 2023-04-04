@@ -13,7 +13,7 @@
               <div v-show="current === 0" key="login">
                 <!-- uses bootstrap card -->
                 <b-card-body class="p-5">
-                  <h3 class="text-center mb-4 fw-normal">Welcome Back!</h3>
+                  <h3 class="text-center mb-4 fw-normal">{{ $t('sign.loginTitle') }}</h3>
 
                   <!-- form -->
                   <!-- uses bootstrap form -->
@@ -23,7 +23,7 @@
                         class="rounded-pill fs-6"
                         v-model="username"
                         trim
-                        placeholder="Username"
+                        :placeholder="$t('profile.username')"
                         required
                         @blur="showError.username = true"
                         size="lg"
@@ -36,7 +36,7 @@
                           invisible: !showError.username || validation.username
                         }"
                       >
-                        Username must be 4-12 characters long
+                        {{ $t('validator.username') }}
                       </b-form-invalid-feedback>
                     </div>
 
@@ -45,7 +45,7 @@
                         class="rounded-pill fs-6"
                         v-model="password"
                         trim
-                        placeholder="Password"
+                        :placeholder="$t('profile.password')"
                         type="password"
                         required
                         @blur="showError.password = true"
@@ -59,7 +59,7 @@
                           invisible: !showError.password || validation.password
                         }"
                       >
-                        The password cannot be empty
+                        {{ $t('validator.password') }}
                       </b-form-invalid-feedback>
                     </div>
 
@@ -73,7 +73,7 @@
                         login-checkbox
                       "
                     >
-                      Remember Me
+                      {{ $t('sign.remember') }}
                     </b-form-checkbox>
                   </b-form>
 
@@ -85,7 +85,7 @@
                       pill
                       class="mt-2 w-100 d-block"
                       @click="login"
-                  >Login</b-button
+                  >{{ $t('sign.login') }}</b-button
                   >
 
                   <!-- Link -->
@@ -94,7 +94,7 @@
                     <b-link
                         class="text-secondary option-link"
                         @click="changeTab(1)"
-                    >Create an Account</b-link
+                    >{{ $t('sign.toRegister') }}</b-link
                     >
                   </div>
                 </b-card-body>
@@ -104,7 +104,7 @@
               <div v-show="current == 1" key="register">
                 <!-- uses bootstrap card -->
                 <b-card-body class="p-5">
-                  <h3 class="text-center mb-4 fw-normal">Create an Account!</h3>
+                  <h3 class="text-center mb-4 fw-normal">{{ $t('sign.registerTitle') }}</h3>
 
                   <!-- form -->
                   <!-- uses bootstrap form -->
@@ -114,7 +114,7 @@
                         class="rounded-pill fs-6"
                         v-model="username"
                         trim
-                        placeholder="Username"
+                        :placeholder="$t('profile.username')"
                         required
                         @blur="showError.username = true"
                         size="lg"
@@ -127,7 +127,7 @@
                           invisible: !showError.username || validation.username
                         }"
                       >
-                        Username must be 4-12 characters long
+                        {{ $t('validator.username') }}
                       </b-form-invalid-feedback>
                     </div>
 
@@ -136,7 +136,7 @@
                         class="rounded-pill fs-6"
                         v-model="email"
                         trim
-                        placeholder="Email"
+                        :placeholder="$t('profile.email')"
                         type="email"
                         required
                         @blur="showError.email = true"
@@ -150,7 +150,7 @@
                           invisible: !showError.email || validation.email
                         }"
                       >
-                        Email format is incorrect
+                        {{ $t('validator.email') }}
                       </b-form-invalid-feedback>
                     </div>
 
@@ -159,7 +159,7 @@
                         class="rounded-pill fs-6"
                         v-model="password"
                         trim
-                        placeholder="Password"
+                        :placeholder="$t('profile.password')"
                         type="password"
                         required
                         @blur="showError.password = true"
@@ -173,23 +173,18 @@
                           invisible: !showError.password || validation.password2
                         }"
                       >
-                        Password must be 6-20 characters long
+                        {{ $t('validator.password') }}
                       </b-form-invalid-feedback>
                     </div>
 
                     <!-- Policy -->
                     <b-form-checkbox
                         v-model="policy"
-                        class="
-                        text-secondary
-                        ms-1
-                        user-select-none
-                        login-checkbox
-                      "
+                        class="text-secondary ms-1 user-select-none login-checkbox"
                     >
-                      I've read and agreed to
-                      <b-link class="option-link">Privacy Policy</b-link>
-                      .
+                      {{ $t('sign.policyStart') }}
+                      <b-link class="option-link">{{ $t('sign.policy') }}</b-link>
+                      {{ $t('sign.policyEnd') }}
                     </b-form-checkbox>
                     <!--<div class="validate-line">
                       <b-form-invalid-feedback :state="false"
@@ -207,7 +202,7 @@
                       pill
                       class="mt-2 w-100 d-block"
                       @click="register"
-                  >Register Account
+                  >{{ $t('sign.register') }}
                   </b-button>
 
                   <!-- Link -->
@@ -216,7 +211,7 @@
                     <b-link
                         class="text-secondary option-link"
                         @click="changeTab(0)"
-                    >Already have an account? Login!
+                    >{{ $t('sign.toLogin') }}
                     </b-link>
                   </div>
                 </b-card-body>
@@ -226,7 +221,7 @@
               <div v-show="current == 2" key="profile">
                 <!-- uses bootstrap card -->
                 <b-card-body class="p-5">
-                  <h3 class="text-center mb-4 fw-normal">Complete Profile!</h3>
+                  <h3 class="text-center mb-4 fw-normal">{{ $t('sign.completeTitle') }}</h3>
 
                   <!-- form -->
                   <!-- uses bootstrap form -->
@@ -236,7 +231,7 @@
                         class="rounded-pill fs-6"
                         v-model="profile.gender"
                         trim
-                        placeholder="Gender"
+                        :placeholder="$t('profile.gender')"
                         type="text"
                         required
                         size="lg"
@@ -247,7 +242,8 @@
                     <b-datepicker
                         class="rounded-pill fs-6 mt-3"
                         v-model="profile.birthday"
-                        locale="en"
+                        :placeholder="$t('profile.birthday')"
+                        :locale="$store.getters.locale"
                         size="lg"
                     ></b-datepicker>
 
@@ -256,7 +252,7 @@
                         class="rounded-pill fs-6 mt-4"
                         v-model.number="profile.height"
                         trim
-                        placeholder="Height(cm)"
+                        :placeholder="`${$t('profile.height')}(cm)`"
                         type="number"
                         required
                         size="lg"
@@ -268,7 +264,7 @@
                         class="rounded-pill fs-6 mt-4"
                         v-model.number="profile.weight"
                         trim
-                        placeholder="Weight(kg)"
+                        :placeholder="`${$t('profile.weight')}(kg)`"
                         type="number"
                         required
                         size="lg"
@@ -284,7 +280,7 @@
                       pill
                       class="mt-4 w-100 d-block"
                       @click="updateProfile"
-                  >Update
+                  >{{ $t('sign.update') }}
                   </b-button>
                   <b-button
                       block
@@ -292,7 +288,7 @@
                       pill
                       class="mt-4 w-100 d-block"
                       @click="changeTab(0)"
-                  >Skip</b-button
+                  >{{ $t('sign.skip') }}</b-button
                   >
                 </b-card-body>
               </div>
@@ -309,6 +305,7 @@ import store from '@/store'
 import md5 from 'crypto-js/md5'
 import { updateProfile } from '@/api/user'
 import {sexOptions} from '@/views/login/props';
+import {i18n} from "@/i18n";
 
 export default {
   name: 'login',
@@ -406,7 +403,7 @@ export default {
      */
     alertComplete() {
       // uses element-ui message
-      this.$message.warning('Please complete the form')
+      this.$message.warning(i18n.t('message.completeForm'))
     },
 
     /**
@@ -429,7 +426,7 @@ export default {
             })
             .then(() => {
               // uses element-ui message
-              this.$message.success('Login success')
+              this.$message.success(i18n.t('message.loginSuccess'))
               // to home
               setTimeout(() => this.$router.push({path: '/'}), 1000);
             })
@@ -450,7 +447,7 @@ export default {
       ) {
         this.alertComplete()
       } else if (!this.policy) {
-        this.$message.warning('Agree to Terms Privacy Policy first')
+        this.$message.warning(i18n.t('message.agreeToPolicyFirst'))
       }
       // register
       else {
@@ -463,7 +460,7 @@ export default {
             .then((res) => {
               this.userID = res.data
               // uses element-ui message
-              this.$message.success('Register success')
+              this.$message.success(i18n.t('message.registerSuccess'))
               // to profile tab
               setTimeout(() => this.changeTab(2), 1000)
             })
@@ -477,10 +474,10 @@ export default {
       // validate
       if (typeof this.profile.height === 'number' && this.profile.height < 0) {
         // uses element-ui message
-        this.$message.error('Height must be greater than 0')
+        this.$message.error(i18n.t('message.heightMustGe0'))
       } else if (typeof this.profile.weight === 'number' && this.profile.weight < 0) {
         // uses element-ui message
-        this.$message.error('Weight must be greater than 0')
+        this.$message.error(i18n.t('message.weightMustGe0'))
       } else {
         const profile = {}
         for (const key in this.profile) {
@@ -497,7 +494,7 @@ export default {
           })
               .then((res) => {
                 // uses element-ui message
-                this.$message.success('Update success')
+                this.$message.success(i18n.t('message.updateSuccess'))
                 // to login tab
                 setTimeout(() => this.changeTab(0), 1000)
               })

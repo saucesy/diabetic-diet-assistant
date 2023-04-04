@@ -6,8 +6,9 @@
           <img :src="user.avatar_url || defaultAvatar" alt="avatar">
         </div>
         <div class="nickname">
-          <small>{{ user.username }}</small>
-          <span>{{ user.relationship.remark }}</span>
+          <small v-if="user.relationship.remark">{{ user.relationship.remark }} ({{ user.username }})</small>
+          <small v-else>{{ user.username }}</small>
+          <span>{{ user.email }}</span>
         </div>
       </div>
       <div class="operation">

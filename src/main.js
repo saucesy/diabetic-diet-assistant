@@ -9,6 +9,7 @@ import 'bootstrap-vue/dist/bootstrap-vue.css'
 import 'element-ui/lib/theme-chalk/index.css'
 import '@/assets/styles/index.scss'
 import './permission'
+import {i18n} from '@/i18n';
 import token from '@/mixins/token'
 Vue.mixin(token)
 
@@ -19,6 +20,7 @@ Vue.use(BootstrapVue)
 Vue.config.productionTip = false
 
 new Vue({
+  i18n,
   router,
   store,
   render: h => h(App)

@@ -1,49 +1,46 @@
 <template>
   <div class="relations-friend">
-    <!--  nav  -->
+    <!-- nav -->
     <nav class="relations-friend__nav">
       <div class="item"
-           v-for="(_, key) of navList"
+           v-for="(item, key) of navs"
            @click="currentNavKey = key"
            :class="{'active': currentNavKey === key}"
            :key="key">
-        <span class="single-omit">{{ key }}</span>
+        <span class="single-omit">{{ item.title }}</span>
       </div>
     </nav>
     <!--  content  -->
     <div class="relations-friend__content">
-      <relations-users :users="navList[currentNavKey]">
+      <relations-users :users="navs[currentNavKey].data">
         <template #default="{ user }">
-          <div class="friends" v-if="currentNavKey === 'Friends'">
+          <div class="friends" v-if="currentNavKey === Object.keys(navs)[0]">
             <i class="el-icon-pie-chart" @click="$emit('jump', `/charts/${user.id}`)"></i>
             <i class="el-icon-date" @click="$emit('jump', `/calender/${user.id}`)"></i>
           </div>
           <div class="new-friends" v-else>
             <div class="applicant" v-if="user.relationship['applicant']">
               <!-- uses element-ui link -->
-              <el-link :underline="false" type="info"> Waiting for validation</el-link>
+              <el-link :underline="false" type="info">{{ $t('relations.waitingFor') }}</el-link>
             </div>
             <div class="not-applicant" v-else>
               <!-- uses element-ui button -->
-              <el-button plain size="small" @click="$emit('agree', user.relationship.id)"> Agree</el-button>
-              <el-button plain size="small" type="danger" @click="$emit('refuse', user.relationship.id)"> Refuse</el-button>
+              <el-button plain size="small" type="danger" @click="$emit('refuse', user.relationship.id)">{{ $t('relations.refuse') }}</el-button>
+              <el-button plain size="small" @click="$emit('agree', user.relationship.id)">{{ $t('relations.agree') }}</el-button>
             </div>
           </div>
         </template>
       </relations-users>
       <!-- uses element-ui empty -->
-      <el-empty v-if="!navList[currentNavKey].length" description="No data."/>
+      <el-empty v-if="!navs[currentNavKey].data.length" :description="$t('relations.noData')"/>
     </div>
   </div>
 </template>
 
 <script>
 import RelationsUsers from '@/views/relations/child/users'
+import {i18n} from "@/i18n";
 
-const navList = {
-  'Friends': [],
-  'New Friends': [],
-}
 export default {
   name: 'RelationsFriend',
   props: {
@@ -54,8 +51,17 @@ export default {
   },
   data() {
     return {
-      navList,
-      currentNavKey: 'Friends',
+      navs: {
+        friends: {
+          title: i18n.t('relations.friends'),
+          data: [],
+        },
+        newFriends: {
+          title: i18n.t('relations.newFriends'),
+          data: [],
+        },
+      },
+      currentNavKey: 'friends',
     }
   },
   watch: {
@@ -68,8 +74,8 @@ export default {
   },
   methods: {
     group() {
-      this.navList.Friends = this.relations.filter((el) => el.relationship.status === 1)
-      this.navList['New Friends'] = this.relations.filter((el) => el.relationship.status === 0)
+      this.navs.friends.data = this.relations.filter((el) => el.relationship.status === 1)
+      this.navs.newFriends.data = this.relations.filter((el) => el.relationship.status === 0)
     }
   },
 }

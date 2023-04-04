@@ -2,7 +2,7 @@
   <div class="food-select" ref="foodSelectRef">
     <div class="food-select__inner" @click="isDisplay = !isDisplay">
       <i class="add iconfont icon-add" :class="{'rotate': isDisplay}"></i>
-      <span>Click Add Food...</span>
+      <span>{{ $t('calender.clickToAdd') }}</span>
     </div>
     <div class="food-select__content" :class="{'display': isDisplay, 'reach-bottom': isReachBottom}">
       <div class="option" @click="onSaveFood(food)" v-for="food of foodList" :key="food.id">

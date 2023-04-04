@@ -54,7 +54,7 @@
             <tr class="child" :key="item.date">
               <td>
                 {{ new Date(item.date).getDate().toString().padStart(2, '0') }}
-                <div style="width: 6px; height: 1px; background-color: #888; margin: 0 auto"></div>
+                <div style="width: 6px; height: 1px; background-color: #888888; margin: 0 auto"></div>
                 {{ (new Date(item.date).getMonth() + 1).toString().padStart(2, '0') }}
               </td>
 
@@ -75,28 +75,28 @@
     <!-- charts -->
     <div class="charts-card bottom">
       <div class="bottom-header">
-        <h3>Chart for {{ options[current].label }}</h3>
+        <h3>{{ $t('charts.chartTitle', { time: options[current].label }) }}</h3>
         <!-- uses bootstrap button -->
-        <b-button size="sm" variant="primary" @click="exportExcel">Export</b-button>
+        <b-button size="sm" variant="primary" @click="exportExcel">{{ $t('charts.export') }}</b-button>
       </div>
       <div class="bottom-chart" ref="chart"></div>
     </div>
 
     <!-- date ranger select modal -->
     <!-- uses bootstrap modal -->
-    <b-modal id="modal" title="Select Date">
+    <b-modal id="modal" :title="$t('charts.select.title')">
       <div>
         <!-- uses bootstrap datepicker -->
-        <label for="datepicker-1">Select start time</label>
-        <b-datepicker id="datepicker-1" class="mb-2" locale="en" v-model="timeFrom"></b-datepicker>
-        <label for="datepicker-2">Select end time</label>
-        <b-datepicker id="datepicker-2" locale="en" v-model="timeTo"></b-datepicker>
+        <label for="datepicker-1">{{ $t('charts.select.startTime') }}</label>
+        <b-datepicker id="datepicker-1" class="mb-2" :locale="$store.getters.locale" v-model="timeFrom"></b-datepicker>
+        <label for="datepicker-2">{{ $t('charts.select.endTime') }}</label>
+        <b-datepicker id="datepicker-2" :locale="$store.getters.locale" v-model="timeTo"></b-datepicker>
       </div>
 
       <!-- uses bootstrap button -->
       <template v-slot:modal-footer>
-        <b-button @click="closeModal">Cancel</b-button>
-        <b-button variant="primary" @click="selectDate">OK</b-button>
+        <b-button @click="closeModal">{{ $t('charts.select.cancel') }}</b-button>
+        <b-button variant="primary" @click="selectDate">{{ $t('charts.select.confirm') }}</b-button>
       </template>
     </b-modal>
 
@@ -123,6 +123,7 @@ import {
 import {LineChart, BarChart} from 'echarts/charts';
 import {UniversalTransition} from 'echarts/features';
 import {CanvasRenderer} from 'echarts/renderers';
+import {i18n} from "@/i18n";
 
 echarts.use([
   TitleComponent,
@@ -160,8 +161,8 @@ export default {
 
       // show data
       display: {
-        title: 'Blood glucose rating',
-        remark: 'Note: Please add the diet in detail before displaying the data; Below the rating is the quality of carbohydrates intake.',
+        title: i18n.t('charts.title'),
+        remark: i18n.t('charts.note'),
         rate: -1
       },
       defaultDisplay: null,
@@ -266,19 +267,19 @@ export default {
       console.log(+new Date(this.timeFrom), +new Date(this.timeTo), +new Date());
       if (this.timeFrom === null || this.timeTo === null) {
         // uses element-ui message
-        this.$message.error('Please select date!');
+        this.$message.error(i18n.t('message.selectDate'));
         return;
       }
       const today = new Date();
       today.setDate(today.getDate() + 1);
       if (+new Date(this.timeTo) > +today) {
         // uses element-ui message
-        this.$message.error('End time cannot be greater than today!');
+        this.$message.error(i18n.t('message.endTimeGeToday'));
         return;
       }
       if (+new Date(this.timeFrom) >= +new Date(this.timeTo)) {
         // uses element-ui message
-        this.$message.error('Start time needs to be less than end time!');
+        this.$message.error(i18n.t('message.startTimeLeEndTime'));
         return;
       }
 
@@ -294,7 +295,7 @@ export default {
      */
     onCellClick(item, diet) {
       this.display.title = `${diet.name ?? ''}(${diet.date}${diet.time ? ' ' + diet.time : ''})`;
-      this.display.remark = diet.remark ? `Remark: ${diet.remark}` : 'No Remark';
+      this.display.remark = diet.remark ? `${i18n.t('charts.remark')}${diet.remark}` : i18n.t('charts.noRemark');
       this.display.rate = diet.rate;
     },
 
@@ -305,8 +306,7 @@ export default {
       let str = '';
       if (this.showingParams.days !== 0) {
         str = this.showingParams.days;
-      }
-      else {
+      } else {
         str = `${this.showingParams.from}/${this.showingParams.to}`;
       }
 
@@ -338,7 +338,7 @@ export default {
 
       // uses echarts
       let myChart = echarts.init(this.$refs.chart, null, {
-        locale: 'EN'
+        locale: this.$store.getters.locale.slice(0, 2)
       });
       let option = {
         tooltip: {
@@ -387,7 +387,7 @@ export default {
         yAxis: [
           {
             type: 'value',
-            name: 'Carbohydrate',
+            name: i18n.t('charts.carbohydrate'),
             position: 'left',
             alignTicks: true,
             axisLine: {
@@ -399,7 +399,7 @@ export default {
           },
           {
             type: 'value',
-            name: 'Blood glucose satisfaction',
+            name: i18n.t('charts.satisfaction'),
             position: 'right',
             alignTicks: true,
             axisLine: {
@@ -412,12 +412,12 @@ export default {
         ],
         series: [
           {
-            name: 'Carbohydrate',
+            name: i18n.t('charts.carbohydrate'),
             type: 'line',
             data: carbohydrate
           },
           {
-            name: 'Blood glucose satisfaction',
+            name: i18n.t('charts.satisfaction'),
             type: 'line',
             data: average_rate,
             yAxisIndex: 1
@@ -453,7 +453,7 @@ export default {
   }
 
   .charts-card {
-    background-color: #FFF;
+    background-color: #FFFFFF;
     width: 100%;
     height: 100%;
 
@@ -607,6 +607,12 @@ export default {
   // bottom-header
   .bottom-header {
     padding: 1.5rem 1.5rem 0;
+    display: flex;
+    align-items: center;
+
+    h3 {
+      flex-grow: 1;
+    }
   }
 
   // bottom-chart

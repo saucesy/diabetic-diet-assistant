@@ -18,6 +18,7 @@
 import RelationsFriend from './friend'
 import RelationsSearch from './search'
 import {agree, getList, refuse} from '@/api/relationship'
+import {i18n} from "@/i18n";
 
 export default {
   name: 'Relations',
@@ -49,7 +50,7 @@ export default {
      */
     onRefuse(value) {
       // uses element-ui notify
-      refuse(value).then(() => this.$notify.success('refuse success!') && this.init())
+      refuse(value).then(() => this.$notify.success(i18n.t('message.operationSuccess')) && this.init())
     },
 
     /**
@@ -59,7 +60,7 @@ export default {
      */
     onAgree(value) {
       // uses element-ui notify
-      agree({id: value}).then(() => this.$notify.success('operation success!') && this.init())
+      agree({id: value}).then(() => this.$notify.success(i18n.t('message.operationSuccess')) && this.init())
     },
   },
 }

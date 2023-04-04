@@ -26,6 +26,7 @@ import {getList} from '@/api/food'
 import {addMeal, getMealByDate, updateMeal} from '@/api/diet'
 import {createDate, createMealModel} from '@/model/meal'
 import {List} from '@/model'
+import {i18n} from "@/i18n";
 
 export default {
   name: 'calender',
@@ -54,12 +55,12 @@ export default {
 
     onPosting(value) {
       // uses element-ui notify
-      addMeal(value).then(() => this.$notify.success('added!') && this.init())
+      addMeal(value).then(() => this.$notify.success(i18n.t('message.publishSuccess')) && this.init())
     },
 
     onUpdate(value) {
       // uses element-ui notify
-      updateMeal(value).then(() => this.$notify.success('updated!') && this.init())
+      updateMeal(value).then(() => this.$notify.success(i18n.t('message.updateSuccess')) && this.init())
     },
 
     onEdit(value) {
